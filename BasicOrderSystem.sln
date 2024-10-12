@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicOrderSystem.WebAPI", "BasicOrderSystem.WebAPI\BasicOrderSystem.WebAPI.csproj", "{2CC43D4F-72F7-447F-9DD3-B394DB242C90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicOrderSystem.Models", "BasicOrderSystem.WebContracts\BasicOrderSystem.Models.csproj", "{2415A298-7FCF-4435-AE14-CB4F100CD19F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicOrderSystem.Models", "BasicOrderSystem.Models\BasicOrderSystem.Models.csproj", "{2415A298-7FCF-4435-AE14-CB4F100CD19F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
