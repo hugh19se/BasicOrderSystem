@@ -11,9 +11,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  <ItemGroup>
+    <ProjectReference Include="..\BasicOrderSystem.Models\BasicOrderSystem.Models.csproj" />
     <ProjectReference Include="..\BasicOrderSystem.WebContracts\BasicOrderSystem.Models.csproj" />
+    <ProjectReference Include="..\BasicOrderSystem.WebContracts\BasicOrderSystem.WebContracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="JSONDB\Customers.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
