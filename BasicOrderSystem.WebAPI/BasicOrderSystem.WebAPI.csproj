@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+  <ItemGroup>
+    <ProjectReference Include="..\BasicOrderSystem.WebContracts\BasicOrderSystem.Models.csproj" />
   </ItemGroup>
 
 </Project>
