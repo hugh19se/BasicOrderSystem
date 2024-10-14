@@ -2,6 +2,7 @@
 using BasicOrderSystem.WebAPI.Interfaces.Services;
 using BasicOrderSystem.WebAPI.Options;
 using Microsoft.Extensions.Options;
+using System.Text;
 using System.Text.Json;
 
 namespace BasicOrderSystem.WebAPI.Services
@@ -22,8 +23,9 @@ namespace BasicOrderSystem.WebAPI.Services
 			try
 			{
                 string customersText = await File.ReadAllTextAsync(_orderRetrieverOptions.CustomersPath, cancellationToken);
-                var customers = JsonSerializer.Deserialize<IList<Customer>>(customersText);//change to async
-
+                byte[] customersBytes = Encoding.UTF8.GetBytes(customersText);
+                MemoryStream customersMemoryStream = new(customersBytes);
+                IList<Customer>? customers = await JsonSerializer.DeserializeAsync<IList<Customer>>(customersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
                 return customers;
 			}
 			catch (Exception ex)
@@ -37,8 +39,9 @@ namespace BasicOrderSystem.WebAPI.Services
             try
             {
                 string ordersText = await File.ReadAllTextAsync(_orderRetrieverOptions.OrdersPath, cancellationToken);
-                IList<Order> orders = JsonSerializer.Deserialize<IList<Order>>(ordersText);//change to async
-
+                byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
+                MemoryStream ordersMemoryStream = new(ordersBytes);
+                IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
                 return orders;
             }
             catch (Exception ex)
