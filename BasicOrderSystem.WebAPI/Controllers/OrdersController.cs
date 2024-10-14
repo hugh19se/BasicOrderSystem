@@ -33,5 +33,22 @@ namespace BasicOrderSystem.WebAPI.Controllers
             }
             return response;
         }
+
+        [HttpGet]
+        public async Task<GetOrdersResponse> GetOrdersAsync(CancellationToken cancellationToken)
+        {
+            GetOrdersResponse response = new();
+            try
+            {
+                response.Orders = await _orderRetriever.GetOrdersAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In: " + nameof(GetOrdersAsync));
+                response.HasError= true;
+                response.ErrorMessage = ex.Message;
+            }
+            return response;
+        }
     }
 }
