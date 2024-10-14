@@ -22,9 +22,9 @@ namespace BasicOrderSystem.WebAPI.Services
 			try
 			{
                 string customersText = await File.ReadAllTextAsync(_orderRetrieverOptions.CustomersPath);
-                var g = JsonSerializer.Deserialize<IList<Customer>>(customersText);
+                var customers = JsonSerializer.Deserialize<IList<Customer>>(customersText);
 
-                return g;
+                return customers;
 			}
 			catch (Exception ex)
 			{
