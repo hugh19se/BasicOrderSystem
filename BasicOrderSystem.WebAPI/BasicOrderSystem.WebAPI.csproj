@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>76226c3f-f6f5-414d-af1a-ed7f46f665e9</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BasicOrderSystem.Models\BasicOrderSystem.Models.csproj" />
+    <ProjectReference Include="..\BasicOrderSystem.WebContracts\BasicOrderSystem.Models.csproj" />
+    <ProjectReference Include="..\BasicOrderSystem.WebContracts\BasicOrderSystem.WebContracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="JSONDB\Customers.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
