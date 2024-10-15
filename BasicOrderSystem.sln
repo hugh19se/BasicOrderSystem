@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicOrderSystem.WebAPI", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicOrderSystem.Models", "BasicOrderSystem.Models\BasicOrderSystem.Models.csproj", "{2415A298-7FCF-4435-AE14-CB4F100CD19F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicOrderSystem.WebContracts", "BasicOrderSystem.WebContracts\BasicOrderSystem.WebContracts.csproj", "{46AE3056-5BEA-4B6C-B354-65DAC2B93E18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicOrderSystem.WebContracts", "BasicOrderSystem.WebContracts\BasicOrderSystem.WebContracts.csproj", "{46AE3056-5BEA-4B6C-B354-65DAC2B93E18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicOrderSystem.WebClients", "BasicOrderSystem.WebClients\BasicOrderSystem.WebClients.csproj", "{04AB6DD6-B404-442D-B174-AE12910361B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
