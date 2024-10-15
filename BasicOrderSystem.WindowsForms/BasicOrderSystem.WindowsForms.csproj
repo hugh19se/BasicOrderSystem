@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BasicOrderSystem.WebClients\BasicOrderSystem.WebClients.csproj" />
+    <ProjectReference Include="..\BasicOrderSystem.WebContracts\BasicOrderSystem.WebContracts.csproj" />
+  </ItemGroup>
+
+</Project>

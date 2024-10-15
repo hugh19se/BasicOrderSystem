@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicOrderSystem.Models", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicOrderSystem.WebContracts", "BasicOrderSystem.WebContracts\BasicOrderSystem.WebContracts.csproj", "{46AE3056-5BEA-4B6C-B354-65DAC2B93E18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicOrderSystem.WindowsForms", "BasicOrderSystem.WindowsForms\BasicOrderSystem.WindowsForms.csproj", "{EEBF43B8-9E99-4C0F-B918-CC0BF3F58F31}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicOrderSystem.WebClients", "BasicOrderSystem.WebClients\BasicOrderSystem.WebClients.csproj", "{04AB6DD6-B404-442D-B174-AE12910361B3}"
 EndProject
 Global
@@ -29,6 +31,14 @@ Global
 		{46AE3056-5BEA-4B6C-B354-65DAC2B93E18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46AE3056-5BEA-4B6C-B354-65DAC2B93E18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46AE3056-5BEA-4B6C-B354-65DAC2B93E18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEBF43B8-9E99-4C0F-B918-CC0BF3F58F31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEBF43B8-9E99-4C0F-B918-CC0BF3F58F31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEBF43B8-9E99-4C0F-B918-CC0BF3F58F31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEBF43B8-9E99-4C0F-B918-CC0BF3F58F31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04AB6DD6-B404-442D-B174-AE12910361B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04AB6DD6-B404-442D-B174-AE12910361B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04AB6DD6-B404-442D-B174-AE12910361B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04AB6DD6-B404-442D-B174-AE12910361B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
