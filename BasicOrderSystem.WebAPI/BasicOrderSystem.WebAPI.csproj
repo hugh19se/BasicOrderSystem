@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BasicOrderSystem.Models\BasicOrderSystem.Models.csproj" />
-    <ProjectReference Include="..\BasicOrderSystem.WebContracts\BasicOrderSystem.Models.csproj" />
     <ProjectReference Include="..\BasicOrderSystem.WebContracts\BasicOrderSystem.WebContracts.csproj" />
   </ItemGroup>
 
