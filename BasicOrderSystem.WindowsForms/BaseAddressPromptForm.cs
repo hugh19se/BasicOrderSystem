@@ -21,7 +21,7 @@ namespace BasicOrderSystem.WindowsForms
 
         private void ExitButton_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Environment.Exit(0);
         }
 
         private async void OkButton_Click(object sender, EventArgs e)
@@ -39,18 +39,22 @@ namespace BasicOrderSystem.WindowsForms
                     return;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Could Not Establish Connection To Web API", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             //API URL works, save it to App config
-            Configuration appConfig = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            Configuration appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            appConfig.AppSettings.Settings.Remove("OrderAPIBaseAddress");
             appConfig.AppSettings.Settings.Add("OrderAPIBaseAddress", baseAddress);
-            appConfig.Save(ConfigurationSaveMode.Minimal);
-            MessageBox.Show("API Base Address Saved Successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            appConfig.Save(ConfigurationSaveMode.Full);
 
+            //Refresh app config
+            ConfigurationManager.RefreshSection(appConfig.AppSettings.SectionInformation.Name);
+
+            MessageBox.Show("API Base Address Saved Successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
     }

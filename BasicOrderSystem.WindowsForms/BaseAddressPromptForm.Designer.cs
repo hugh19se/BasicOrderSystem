@@ -80,7 +80,11 @@
             Controls.Add(OkButton);
             Controls.Add(BaseAddressTextBox);
             Controls.Add(EnterBaseAddressLabel);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "BaseAddressPromptForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Enter Base Address";
             ResumeLayout(false);
             PerformLayout();
