@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog" Version="4.0.2" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BasicOrderSystem.Models\BasicOrderSystem.Models.csproj" />
     <ProjectReference Include="..\BasicOrderSystem.WebClients\BasicOrderSystem.WebClients.csproj" />
     <ProjectReference Include="..\BasicOrderSystem.WebContracts\BasicOrderSystem.WebContracts.csproj" />

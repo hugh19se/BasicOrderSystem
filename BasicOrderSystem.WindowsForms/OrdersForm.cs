@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Serilog;
 
 namespace BasicOrderSystem.WindowsForms
 {
@@ -81,7 +82,7 @@ namespace BasicOrderSystem.WindowsForms
             }
             catch (Exception ex)
             {
-                //TODO: Add Serilog
+                Log.Error(ex, "EXCEPTION in " + nameof(SearchButton_Click));
                 MessageBox.Show("An Error Occurred While Sending The API Request:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
