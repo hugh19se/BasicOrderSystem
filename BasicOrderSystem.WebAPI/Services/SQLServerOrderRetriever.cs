@@ -27,11 +27,11 @@ namespace BasicOrderSystem.WebAPI.Services
                 throw;
             }
         }
-        public async Task<IList<Order>> GetOrdersAsync(CancellationToken cancellationToken)
+        public async Task<IList<Order>> GetOrdersAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken)
         {
             try
             {
-                return await _orderDBRepositoryDataAccess.GetOrdersAsync(cancellationToken);
+                return await _orderDBRepositoryDataAccess.GetOrdersAsync(fromDate, toDate, cancellationToken);
             }
             catch (Exception ex)
             {

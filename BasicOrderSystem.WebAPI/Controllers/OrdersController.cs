@@ -35,12 +35,12 @@ namespace BasicOrderSystem.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<GetOrdersResponse> GetOrdersAsync(CancellationToken cancellationToken)
+        public async Task<GetOrdersResponse> GetOrdersAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken)
         {
             GetOrdersResponse response = new();
             try
             {
-                response.Orders = await _orderRetriever.GetOrdersAsync(cancellationToken);
+                response.Orders = await _orderRetriever.GetOrdersAsync(fromDate, toDate, cancellationToken);
             }
             catch (Exception ex)
             {

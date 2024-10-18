@@ -14,9 +14,9 @@ namespace BasicOrderSystem.WebClients
             return await GetResponse<GetCustomersResponse>(ControllerRoute + "GetCustomers");
         }
 
-        public async Task<GetOrdersResponse> GetOrdersAsync()
+        public async Task<GetOrdersResponse> GetOrdersAsync(DateTime fromDate, DateTime toDate)
         {
-            return await GetResponse<GetOrdersResponse>(ControllerRoute + "GetOrders");
+            return await GetResponse<GetOrdersResponse>(ControllerRoute + "GetOrders" + $"?fromDate={fromDate}&toDate={toDate}");
         }
     }
 }

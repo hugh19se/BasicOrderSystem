@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dateTimePicker1 = new DateTimePicker();
-            dateTimePicker2 = new DateTimePicker();
+            FromDatePicker = new DateTimePicker();
+            ToDatePicker = new DateTimePicker();
             FromLabel = new Label();
             ToLabel = new Label();
             StatusComboBox = new ComboBox();
@@ -44,19 +44,19 @@
             OrderDeliveredHeader = new ColumnHeader();
             SuspendLayout();
             // 
-            // dateTimePicker1
+            // FromDatePicker
             // 
-            dateTimePicker1.Location = new Point(12, 27);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(200, 23);
-            dateTimePicker1.TabIndex = 0;
+            FromDatePicker.Location = new Point(12, 27);
+            FromDatePicker.Name = "FromDatePicker";
+            FromDatePicker.Size = new Size(200, 23);
+            FromDatePicker.TabIndex = 0;
             // 
-            // dateTimePicker2
+            // ToDatePicker
             // 
-            dateTimePicker2.Location = new Point(218, 27);
-            dateTimePicker2.Name = "dateTimePicker2";
-            dateTimePicker2.Size = new Size(200, 23);
-            dateTimePicker2.TabIndex = 1;
+            ToDatePicker.Location = new Point(218, 27);
+            ToDatePicker.Name = "ToDatePicker";
+            ToDatePicker.Size = new Size(200, 23);
+            ToDatePicker.TabIndex = 1;
             // 
             // FromLabel
             // 
@@ -154,8 +154,8 @@
             Controls.Add(StatusComboBox);
             Controls.Add(ToLabel);
             Controls.Add(FromLabel);
-            Controls.Add(dateTimePicker2);
-            Controls.Add(dateTimePicker1);
+            Controls.Add(ToDatePicker);
+            Controls.Add(FromDatePicker);
             Name = "OrdersForm";
             Text = "Orders";
             Load += OrdersForm_Load;
@@ -165,8 +165,8 @@
 
         #endregion
 
-        private DateTimePicker dateTimePicker1;
-        private DateTimePicker dateTimePicker2;
+        private DateTimePicker FromDatePicker;
+        private DateTimePicker ToDatePicker;
         private Label FromLabel;
         private Label ToLabel;
         private ComboBox StatusComboBox;

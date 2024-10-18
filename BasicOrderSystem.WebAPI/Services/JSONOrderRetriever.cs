@@ -34,7 +34,7 @@ namespace BasicOrderSystem.WebAPI.Services
 				throw;
             }
         }
-        public async Task<IList<Order>> GetOrdersAsync(CancellationToken cancellationToken)
+        public async Task<IList<Order>> GetOrdersAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken)
         {
             try
             {
@@ -42,7 +42,10 @@ namespace BasicOrderSystem.WebAPI.Services
                 byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
                 MemoryStream ordersMemoryStream = new(ordersBytes);
                 IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
-                return orders;
+
+                IList<Order>? filteredOrders = orders.Where(x => x.OrderPlaced >= fromDate && x.OrderPlaced <= toDate).ToList();
+
+                return filteredOrders;
             }
             catch (Exception ex)
             {

@@ -59,7 +59,7 @@ namespace BasicOrderSystem.WebAPI.Repositories
             }
             return customers;
         }
-        public async Task<IList<Order>> GetOrdersAsync(CancellationToken cancellationToken)
+        public async Task<IList<Order>> GetOrdersAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken)
         {
             List<Order> orders = new();
             try
@@ -70,6 +70,9 @@ namespace BasicOrderSystem.WebAPI.Repositories
                 {
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.GetOrdersStoredProcedure;
+
+                    sqlCmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
+                    sqlCmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
 
                     await sqlConnection.OpenAsync(cancellationToken);
                     SqlDataReader dataReader = await sqlCmd.ExecuteReaderAsync(cancellationToken);

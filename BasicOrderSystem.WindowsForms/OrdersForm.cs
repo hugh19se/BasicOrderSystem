@@ -45,7 +45,7 @@ namespace BasicOrderSystem.WindowsForms
                 }
 
                 //Make API call
-                GetOrdersResponse? response = await OrdersClient.GetOrdersAsync();
+                GetOrdersResponse? response = await OrdersClient.GetOrdersAsync(FromDatePicker.Value, ToDatePicker.Value);
                 IList<Order> orders = response.Orders;
 
                 //Iterate over orders, add to orderListViewItems

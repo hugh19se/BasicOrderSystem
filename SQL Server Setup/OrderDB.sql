@@ -338,6 +338,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetOrders]
+(
+	@FromDate DATETIME
+	, @ToDate DATETIME
+)
 AS
 BEGIN
 SELECT
@@ -348,6 +352,8 @@ SELECT
 	, o.OrderPlaced
 	, o.OrderDelivered
 FROM
-Orders o
+	Orders o
+WHERE
+	o.OrderPlaced >= @FromDate AND
+	o.OrderPlaced <= @ToDate
 END
-GO
