@@ -1,5 +1,5 @@
-﻿using BasicOrderSystem.WebContracts;
-using BasicOrderSystem.WebAPI.Interfaces.Services;
+﻿using BasicOrderSystem.WebAPI.Interfaces.Services;
+using BasicOrderSystem.WebContracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BasicOrderSystem.WebAPI.Controllers
@@ -45,7 +45,7 @@ namespace BasicOrderSystem.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "EXCEPTION In: " + nameof(GetOrdersAsync));
-                response.HasError= true;
+                response.HasError = true;
                 response.ErrorMessage = ex.Message;
             }
             return response;

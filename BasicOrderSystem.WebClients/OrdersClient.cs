@@ -1,9 +1,4 @@
 ﻿using BasicOrderSystem.WebContracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BasicOrderSystem.WebClients
 {
@@ -12,7 +7,7 @@ namespace BasicOrderSystem.WebClients
         private readonly string ControllerRoute = "/api/Orders/";
 
         public OrdersClient(string baseAddress, int timeout = 60)
-            : base(baseAddress, timeout){}
+            : base(baseAddress, timeout) { }
 
         public async Task<GetCustomersResponse> GetCustomersAsync()
         {
