@@ -1,6 +1,6 @@
 ﻿namespace BasicOrderSystem.Models
 {
-    enum OrderStatuses
+    public enum OrderStatuses
     {
         Created=1,
         Delivered=2

@@ -338,6 +338,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetOrders]
+(
+	@FromDate DATETIME
+	, @ToDate DATETIME
+)
 AS
 BEGIN
 SELECT
@@ -348,6 +352,45 @@ SELECT
 	, o.OrderPlaced
 	, o.OrderDelivered
 FROM
-Orders o
+	Orders o
+WHERE
+	o.OrderPlaced >= @FromDate AND
+	o.OrderPlaced <= @ToDate
+END
+USE [OrderDB]
+GO
+/****** Object:  StoredProcedure [dbo].[GetOrderInfo]    Script Date: 10/18/2024 6:47:20 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetOrderInfo]
+(
+	@OrderID INT
+)
+AS
+BEGIN
+SELECT
+	o.OrderID
+	, o.CustomerID
+	, o.[Status]
+	, o.Total
+	, o.OrderPlaced
+	, o.OrderDelivered
+	, c.Email
+	, c.Forenames
+	, c.Surname
+	, c.Line1
+	, c.Line2
+	, c.City
+	, c.Postcode
+FROM
+	Orders o
+LEFT JOIN
+	Customers c
+ON
+	c.CustomerID = o.CustomerID
+WHERE
+	o.OrderID = @OrderID
 END
 GO

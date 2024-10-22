@@ -59,7 +59,7 @@ namespace BasicOrderSystem.WebAPI.Repositories
             }
             return customers;
         }
-        public async Task<IList<Order>> GetOrdersAsync(CancellationToken cancellationToken)
+        public async Task<IList<Order>> GetOrdersAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken)
         {
             List<Order> orders = new();
             try
@@ -70,6 +70,9 @@ namespace BasicOrderSystem.WebAPI.Repositories
                 {
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.GetOrdersStoredProcedure;
+
+                    sqlCmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
+                    sqlCmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
 
                     await sqlConnection.OpenAsync(cancellationToken);
                     SqlDataReader dataReader = await sqlCmd.ExecuteReaderAsync(cancellationToken);
@@ -101,6 +104,65 @@ namespace BasicOrderSystem.WebAPI.Repositories
                 throw;
             }
             return orders;
+        }
+        public async Task<KeyValuePair<Order, Customer>> GetOrderInfoAsync(int orderID, CancellationToken cancellationToken)
+        {
+            KeyValuePair<Order, Customer> orderInfo = new();
+            try
+            {
+                string connectionString = _connectionStringBuilder.GetConnectionString(_orderDBOptions.ConnectionString);
+                using (SqlConnection sqlConnection = new(connectionString))
+                using (SqlCommand sqlCmd = sqlConnection.CreateCommand())
+                {
+                    sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCmd.CommandText = _orderDBOptions.GetOrderInfoStoredProcedure;
+
+                    sqlCmd.Parameters.Add(new SqlParameter("@OrderID", orderID));
+
+                    await sqlConnection.OpenAsync(cancellationToken);
+                    SqlDataReader dataReader = await sqlCmd.ExecuteReaderAsync(cancellationToken);
+                    while (await dataReader.ReadAsync(cancellationToken))
+                    {
+                        //Get Order info
+                        Order order = new Order
+                        {
+                            OrderID = Convert.ToInt32(dataReader["OrderID"]),
+                            CustomerID = Convert.ToInt32(dataReader["CustomerID"]),
+                            Status = Convert.ToInt32(dataReader["Status"]),
+                            Total = float.Parse(Convert.ToString(dataReader["Total"])),
+                            OrderPlaced = DateTime.Parse(Convert.ToString(dataReader["OrderPlaced"]))
+                        };
+
+                        //OrderDelivered field can be null, check before adding to orderToAdd
+                        string orderDeliveredString = Convert.ToString(dataReader["OrderDelivered"]);
+                        if (!string.IsNullOrEmpty(orderDeliveredString))
+                        {
+
+                            order.OrderDelivered = DateTime.Parse(orderDeliveredString);
+                        }
+
+                        //Get Customer info
+                        var customer = new Customer
+                        {
+                            Email = Convert.ToString(dataReader["Email"]),
+                            Forenames = Convert.ToString(dataReader["Forenames"]),
+                            Surname = Convert.ToString(dataReader["Surname"]),
+                            Line1 = Convert.ToString(dataReader["Line1"]),
+                            Line2 = Convert.ToString(dataReader["Line2"]),
+                            City = Convert.ToString(dataReader["City"]),
+                            Postcode = Convert.ToString(dataReader["Postcode"]),
+                        };
+
+                        orderInfo = new KeyValuePair<Order, Customer>(order, customer);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION IN " + nameof(GetCustomersAsync));
+                throw;
+            }
+            return orderInfo;
         }
     }
 }

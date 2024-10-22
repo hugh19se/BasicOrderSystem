@@ -34,7 +34,7 @@ namespace BasicOrderSystem.WebAPI.Services
 				throw;
             }
         }
-        public async Task<IList<Order>> GetOrdersAsync(CancellationToken cancellationToken)
+        public async Task<IList<Order>> GetOrdersAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken)
         {
             try
             {
@@ -42,7 +42,28 @@ namespace BasicOrderSystem.WebAPI.Services
                 byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
                 MemoryStream ordersMemoryStream = new(ordersBytes);
                 IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
-                return orders;
+
+                IList<Order>? filteredOrders = orders.Where(x => x.OrderPlaced >= fromDate && x.OrderPlaced <= toDate).ToList();
+
+                return filteredOrders;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In " + nameof(GetOrdersAsync));
+                throw;
+            }
+        }
+        public async Task<KeyValuePair<Order, Customer>> GetOrderInfoAsync(int orderID, CancellationToken cancellationToken)
+        {
+            try
+            {
+                IList<Order> orders = await GetOrdersAsync(DateTime.MinValue, DateTime.MaxValue, cancellationToken);
+                IList<Customer> customers = await GetCustomersAsync(cancellationToken);
+
+                Order order = orders.Where(x => x.OrderID == orderID).FirstOrDefault();
+                Customer orderCustomer = customers.Where(x => x.CustomerID == order.CustomerID).FirstOrDefault();
+
+                return new KeyValuePair<Order, Customer>(order, orderCustomer);
             }
             catch (Exception ex)
             {
