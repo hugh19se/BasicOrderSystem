@@ -76,5 +76,16 @@ namespace BasicOrderSystem.WindowsForms
                 MessageBox.Show("An Error Occurred While Sending The API Request:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private async void OrderInfoMenuItem_Click(object sender, EventArgs e)
+        {
+            //Get Order Info
+            ListViewItem? selectedOrderItem = OrdersListView.SelectedItems[0];
+            int orderID = Convert.ToInt32(selectedOrderItem.SubItems[0].Text);
+            GetOrderInfoResponse orderInfo = await OrdersClient.GetOrderInfoAsync(orderID);
+
+            //Open Order Info Form
+            OrderInfoForm orderInfoForm = new(orderInfo.Order, orderInfo.Customer);
+            orderInfoForm.ShowDialog();
+        }
     }
 }

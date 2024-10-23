@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             FromDatePicker = new DateTimePicker();
             ToDatePicker = new DateTimePicker();
             FromLabel = new Label();
@@ -42,6 +43,9 @@
             TotalHeader = new ColumnHeader();
             OrderPlacedHeader = new ColumnHeader();
             OrderDeliveredHeader = new ColumnHeader();
+            OrdersContextMenu = new ContextMenuStrip(components);
+            OrderInfoMenuItem = new ToolStripMenuItem();
+            OrdersContextMenu.SuspendLayout();
             SuspendLayout();
             // 
             // FromDatePicker
@@ -106,8 +110,10 @@
             // OrdersListView
             // 
             OrdersListView.Columns.AddRange(new ColumnHeader[] { OrderIDHeader, CustomerIDHeader, StatusHeader, TotalHeader, OrderPlacedHeader, OrderDeliveredHeader });
+            OrdersListView.ContextMenuStrip = OrdersContextMenu;
             OrdersListView.FullRowSelect = true;
             OrdersListView.Location = new Point(12, 56);
+            OrdersListView.MultiSelect = false;
             OrdersListView.Name = "OrdersListView";
             OrdersListView.Size = new Size(776, 226);
             OrdersListView.TabIndex = 7;
@@ -143,6 +149,19 @@
             OrderDeliveredHeader.Text = "Order Delivered";
             OrderDeliveredHeader.Width = 145;
             // 
+            // OrdersContextMenu
+            // 
+            OrdersContextMenu.Items.AddRange(new ToolStripItem[] { OrderInfoMenuItem });
+            OrdersContextMenu.Name = "OrdersContextMenu";
+            OrdersContextMenu.Size = new Size(129, 26);
+            // 
+            // OrderInfoMenuItem
+            // 
+            OrderInfoMenuItem.Name = "OrderInfoMenuItem";
+            OrderInfoMenuItem.Size = new Size(128, 22);
+            OrderInfoMenuItem.Text = "Order Info";
+            OrderInfoMenuItem.Click += OrderInfoMenuItem_Click;
+            // 
             // OrdersForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -159,6 +178,7 @@
             Name = "OrdersForm";
             Text = "Orders";
             Load += OrdersForm_Load;
+            OrdersContextMenu.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -179,5 +199,7 @@
         private ColumnHeader TotalHeader;
         private ColumnHeader OrderPlacedHeader;
         private ColumnHeader OrderDeliveredHeader;
+        private ContextMenuStrip OrdersContextMenu;
+        private ToolStripMenuItem OrderInfoMenuItem;
     }
 }
