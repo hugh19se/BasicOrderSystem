@@ -1,4 +1,5 @@
-﻿using BasicOrderSystem.WebAPI.Interfaces.Services;
+﻿using BasicOrderSystem.Models;
+using BasicOrderSystem.WebAPI.Interfaces.Services;
 using BasicOrderSystem.WebContracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,6 +46,24 @@ namespace BasicOrderSystem.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "EXCEPTION In: " + nameof(GetOrdersAsync));
+                response.HasError = true;
+                response.ErrorMessage = ex.Message;
+            }
+            return response;
+        }
+        [HttpGet]
+        public async Task<GetOrderInfoResponse> GetOrderInfoAsync(int orderID, CancellationToken cancellationToken)
+        {
+            GetOrderInfoResponse response = new();
+            try
+            {
+                KeyValuePair<Order, Customer> orderInfo = await _orderRetriever.GetOrderInfoAsync(orderID, cancellationToken);
+                response.Order = orderInfo.Key;
+                response.Customer = orderInfo.Value;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In: " + nameof(GetOrderInfoAsync));
                 response.HasError = true;
                 response.ErrorMessage = ex.Message;
             }

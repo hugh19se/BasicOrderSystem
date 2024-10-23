@@ -8,5 +8,6 @@ namespace BasicOrderSystem.WebAPI.Options
         public ConnectionStringConfig ConnectionString { get; set; }
         public string GetCustomersStoredProcedure { get; set; }
         public string GetOrdersStoredProcedure { get; set; }
+        public string GetOrderInfoStoredProcedure { get; set; }
     }
 }

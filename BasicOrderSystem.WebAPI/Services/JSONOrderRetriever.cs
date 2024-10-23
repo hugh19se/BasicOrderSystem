@@ -53,5 +53,23 @@ namespace BasicOrderSystem.WebAPI.Services
                 throw;
             }
         }
+        public async Task<KeyValuePair<Order, Customer>> GetOrderInfoAsync(int orderID, CancellationToken cancellationToken)
+        {
+            try
+            {
+                IList<Order> orders = await GetOrdersAsync(DateTime.MinValue, DateTime.MaxValue, cancellationToken);
+                IList<Customer> customers = await GetCustomersAsync(cancellationToken);
+
+                Order order = orders.Where(x => x.OrderID == orderID).FirstOrDefault();
+                Customer orderCustomer = customers.Where(x => x.CustomerID == order.CustomerID).FirstOrDefault();
+
+                return new KeyValuePair<Order, Customer>(order, orderCustomer);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In " + nameof(GetOrdersAsync));
+                throw;
+            }
+        }
     }
 }
