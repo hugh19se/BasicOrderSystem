@@ -84,7 +84,7 @@ namespace BasicOrderSystem.WindowsForms
             GetOrderInfoResponse orderInfo = await OrdersClient.GetOrderInfoAsync(orderID);
 
             //Open Order Info Form
-            OrderInfoForm orderInfoForm = new(orderInfo.Order, orderInfo.Customer);
+            OrderInfoForm orderInfoForm = new(orderInfo.OrderInfo.Order, orderInfo.OrderInfo.Customer);
             orderInfoForm.ShowDialog();
         }
     }

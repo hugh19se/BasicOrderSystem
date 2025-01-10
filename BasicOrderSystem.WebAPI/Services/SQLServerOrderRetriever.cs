@@ -39,7 +39,7 @@ namespace BasicOrderSystem.WebAPI.Services
                 throw;
             }
         }
-        public async Task<KeyValuePair<Order, Customer>> GetOrderInfoAsync(int orderID, CancellationToken cancellationToken)
+        public async Task<OrderInfo> GetOrderInfoAsync(int orderID, CancellationToken cancellationToken)
         {
             try
             {

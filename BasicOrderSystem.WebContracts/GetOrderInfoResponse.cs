@@ -6,9 +6,7 @@ namespace BasicOrderSystem.WebContracts
 {
     public class GetOrderInfoResponse : ResponseBase
     {
-        [JsonPropertyName("order")]
-        public Order Order { get; set; }
-        [JsonPropertyName("customer")]
-        public Customer Customer { get; set; }
+        [JsonPropertyName("order-info")]
+        public OrderInfo OrderInfo { get; set; }
     }
 }

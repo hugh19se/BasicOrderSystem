@@ -7,6 +7,6 @@ namespace BasicOrderSystem.WebAPI.Interfaces.Services
         Task<IList<Customer>> GetCustomersAsync(CancellationToken cancellationToken);
         Task<IList<Order>> GetOrdersAsync(DateTime fromDate, DateTime toDate, OrderStatus orderStatus, CancellationToken cancellationToken);
         //Look at adding options for status, customer and order ID
-        Task<KeyValuePair<Order, Customer>> GetOrderInfoAsync(int orderID, CancellationToken cancellationToken);
+        Task<OrderInfo> GetOrderInfoAsync(int orderID, CancellationToken cancellationToken);
     }
 }

@@ -20,7 +20,7 @@ namespace BasicOrderSystem.WebAPI.DataAccess
         {
             return await _orderDBRepository.GetOrdersAsync(fromDate, toDate, orderStatus, cancellationToken);
         }
-        public async Task<KeyValuePair<Order, Customer>> GetOrderInfoAsync(int orderID, CancellationToken cancellationToken)
+        public async Task<OrderInfo> GetOrderInfoAsync(int orderID, CancellationToken cancellationToken)
         {
             return await _orderDBRepository.GetOrderInfoAsync(orderID, cancellationToken);
         }

@@ -57,9 +57,7 @@ namespace BasicOrderSystem.WebAPI.Controllers
             GetOrderInfoResponse response = new();
             try
             {
-                KeyValuePair<Order, Customer> orderInfo = await _orderRetriever.GetOrderInfoAsync(orderID, cancellationToken);
-                response.Order = orderInfo.Key;
-                response.Customer = orderInfo.Value;
+                response.OrderInfo = await _orderRetriever.GetOrderInfoAsync(orderID, cancellationToken);
             }
             catch (Exception ex)
             {
