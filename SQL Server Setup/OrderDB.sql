@@ -1,6 +1,6 @@
 USE [OrderDB]
 GO
-/****** Object:  Table [dbo].[Customers]    Script Date: 10/14/2024 10:40:10 PM ******/
+/****** Object:  Table [dbo].[Customers]    Script Date: 1/10/2025 12:28:19 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -20,7 +20,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 10/14/2024 10:40:10 PM ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 1/10/2025 12:28:19 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -38,7 +38,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OrderStatuses]    Script Date: 10/14/2024 10:40:10 PM ******/
+/****** Object:  Table [dbo].[OrderStatuses]    Script Date: 1/10/2025 12:28:19 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -311,7 +311,7 @@ GO
 ALTER TABLE [dbo].[Orders]  WITH CHECK ADD FOREIGN KEY([CustomerID])
 REFERENCES [dbo].[Customers] ([CustomerID])
 GO
-/****** Object:  StoredProcedure [dbo].[GetCustomers]    Script Date: 10/14/2024 10:40:10 PM ******/
+/****** Object:  StoredProcedure [dbo].[GetCustomers]    Script Date: 1/10/2025 12:28:19 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -332,34 +332,7 @@ FROM
 Customers c
 END
 GO
-/****** Object:  StoredProcedure [dbo].[GetOrders]    Script Date: 10/14/2024 10:40:10 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetOrders]
-(
-	@FromDate DATETIME
-	, @ToDate DATETIME
-)
-AS
-BEGIN
-SELECT
-	o.OrderID
-	, o.CustomerID
-	, o.[Status]
-	, o.Total
-	, o.OrderPlaced
-	, o.OrderDelivered
-FROM
-	Orders o
-WHERE
-	o.OrderPlaced >= @FromDate AND
-	o.OrderPlaced <= @ToDate
-END
-USE [OrderDB]
-GO
-/****** Object:  StoredProcedure [dbo].[GetOrderInfo]    Script Date: 10/18/2024 6:47:20 AM ******/
+/****** Object:  StoredProcedure [dbo].[GetOrderInfo]    Script Date: 1/10/2025 12:28:19 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -392,5 +365,33 @@ ON
 	c.CustomerID = o.CustomerID
 WHERE
 	o.OrderID = @OrderID
+END
+GO
+/****** Object:  StoredProcedure [dbo].[GetOrders]    Script Date: 1/10/2025 12:28:19 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetOrders]
+(
+	@FromDate DATETIME
+	, @ToDate DATETIME
+	, @OrderStatus INT
+)
+AS
+BEGIN
+SELECT
+	o.OrderID
+	, o.CustomerID
+	, o.[Status]
+	, o.Total
+	, o.OrderPlaced
+	, o.OrderDelivered
+FROM
+	Orders o
+WHERE
+	o.OrderPlaced >= @FromDate AND
+	o.OrderPlaced <= @ToDate AND
+	o.[Status] = @OrderStatus
 END
 GO

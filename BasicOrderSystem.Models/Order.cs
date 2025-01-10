@@ -9,7 +9,7 @@ namespace BasicOrderSystem.Models
         [JsonPropertyName("customer_id")]
         public int CustomerID { get; set; }
         [JsonPropertyName("status")]
-        public int Status { get; set; }
+        public OrderStatus Status { get; set; }
         [JsonPropertyName("total")]
         public float Total { get; set; }
         [JsonPropertyName("order_placed")]

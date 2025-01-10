@@ -16,9 +16,9 @@ namespace BasicOrderSystem.WebAPI.DataAccess
         {
             return await _orderDBRepository.GetCustomersAsync(cancellationToken);
         }
-        public async Task<IList<Order>> GetOrdersAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken)
+        public async Task<IList<Order>> GetOrdersAsync(DateTime fromDate, DateTime toDate, OrderStatus orderStatus, CancellationToken cancellationToken)
         {
-            return await _orderDBRepository.GetOrdersAsync(fromDate, toDate, cancellationToken);
+            return await _orderDBRepository.GetOrdersAsync(fromDate, toDate, orderStatus, cancellationToken);
         }
         public async Task<KeyValuePair<Order, Customer>> GetOrderInfoAsync(int orderID, CancellationToken cancellationToken)
         {

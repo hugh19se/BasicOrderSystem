@@ -59,7 +59,7 @@ namespace BasicOrderSystem.WebAPI.Repositories
             }
             return customers;
         }
-        public async Task<IList<Order>> GetOrdersAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken)
+        public async Task<IList<Order>> GetOrdersAsync(DateTime fromDate, DateTime toDate, OrderStatus orderStatus, CancellationToken cancellationToken)
         {
             List<Order> orders = new();
             try
@@ -73,6 +73,7 @@ namespace BasicOrderSystem.WebAPI.Repositories
 
                     sqlCmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
                     sqlCmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
+                    sqlCmd.Parameters.Add(new SqlParameter("@OrderStatus", orderStatus));
 
                     await sqlConnection.OpenAsync(cancellationToken);
                     SqlDataReader dataReader = await sqlCmd.ExecuteReaderAsync(cancellationToken);
@@ -82,7 +83,7 @@ namespace BasicOrderSystem.WebAPI.Repositories
                         {
                             OrderID = Convert.ToInt32(dataReader["OrderID"]),
                             CustomerID = Convert.ToInt32(dataReader["CustomerID"]),
-                            Status = Convert.ToInt32(dataReader["Status"]),
+                            Status = (OrderStatus)Convert.ToInt32(dataReader["Status"]),
                             Total = float.Parse(Convert.ToString(dataReader["Total"])),
                             OrderPlaced = DateTime.Parse(Convert.ToString(dataReader["OrderPlaced"]))
                         };

@@ -28,7 +28,7 @@ namespace BasicOrderSystem.WindowsForms
         private void OrdersForm_Load(object sender, EventArgs e)
         {
             //Populate statuses combo box
-            foreach (OrderStatuses status in Enum.GetValues(typeof(OrderStatuses)))
+            foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
             {
                 StatusComboBox.Items.Add(status);
             }
@@ -38,14 +38,14 @@ namespace BasicOrderSystem.WindowsForms
             try
             {
                 //Check if user has selected a status
-                if (string.IsNullOrEmpty(StatusComboBox.Text))
+                if (!Enum.TryParse(StatusComboBox.Text, out OrderStatus orderStatus) && string.IsNullOrEmpty(StatusComboBox.Text))
                 {
                     MessageBox.Show("Please Enter A Valid Status", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 //Make API call
-                GetOrdersResponse? response = await OrdersClient.GetOrdersAsync(FromDatePicker.Value, ToDatePicker.Value);
+                GetOrdersResponse? response = await OrdersClient.GetOrdersAsync(FromDatePicker.Value, ToDatePicker.Value, orderStatus);
                 IList<Order> orders = response.Orders;
 
                 //Iterate over orders, add to orderListViewItems
@@ -56,7 +56,7 @@ namespace BasicOrderSystem.WindowsForms
 
                     orderItem.Text = order.OrderID.ToString();
                     orderItem.SubItems.Add(order.CustomerID.ToString());
-                    orderItem.SubItems.Add(((OrderStatuses)order.Status).ToString());
+                    orderItem.SubItems.Add(order.Status.ToString());
                     orderItem.SubItems.Add("£" + order.Total.ToString());
                     orderItem.SubItems.Add(order.OrderPlaced.ToString());
                     orderItem.SubItems.Add(order.OrderDelivered.ToString());

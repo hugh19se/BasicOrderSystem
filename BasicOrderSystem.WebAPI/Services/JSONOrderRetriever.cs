@@ -22,6 +22,7 @@ namespace BasicOrderSystem.WebAPI.Services
         {
 			try
 			{
+                //get customers
                 string customersText = await File.ReadAllTextAsync(_orderRetrieverOptions.CustomersPath, cancellationToken);
                 byte[] customersBytes = Encoding.UTF8.GetBytes(customersText);
                 MemoryStream customersMemoryStream = new(customersBytes);
@@ -34,16 +35,18 @@ namespace BasicOrderSystem.WebAPI.Services
 				throw;
             }
         }
-        public async Task<IList<Order>> GetOrdersAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken)
+        public async Task<IList<Order>> GetOrdersAsync(DateTime fromDate, DateTime toDate, OrderStatus orderStatus, CancellationToken cancellationToken)
         {
             try
             {
+                //Get orders
                 string ordersText = await File.ReadAllTextAsync(_orderRetrieverOptions.OrdersPath, cancellationToken);
                 byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
                 MemoryStream ordersMemoryStream = new(ordersBytes);
                 IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
 
-                IList<Order>? filteredOrders = orders.Where(x => x.OrderPlaced >= fromDate && x.OrderPlaced <= toDate).ToList();
+                //Filter orders based on date range and order status
+                IList<Order>? filteredOrders = orders.Where(x => x.OrderPlaced >= fromDate && x.OrderPlaced <= toDate && x.Status == orderStatus).ToList();
 
                 return filteredOrders;
             }
