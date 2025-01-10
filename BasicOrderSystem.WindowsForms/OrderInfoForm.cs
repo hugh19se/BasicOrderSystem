@@ -30,16 +30,16 @@ namespace BasicOrderSystem.WindowsForms
             CustomerIDTextBox.Text = OrderInfo.CustomerID.ToString();
             TotalTextBox.Text = "£" + OrderInfo.Total.ToString();
             OrderPlacedDatePicker.Value = OrderInfo.OrderPlaced;
-            //need to set up status radio buttons
-            OrderStatuses orderStatus = (OrderStatuses)OrderInfo.Status;
-            if (orderStatus == OrderStatuses.Created)
+            //Set up status radio buttons
+            switch (OrderInfo.Status)
             {
+                case OrderStatus.Created:
                 NotDeliveredRadioButton.Checked = true;
                 OrderDeliveredDatePicker.Enabled = false;
-            }
-            else if (orderStatus == OrderStatuses.Delivered)
-            {
+                    break;
+                case OrderStatus.Delivered:
                 OrderDeliveredDatePicker.Value = OrderInfo.OrderDelivered ?? DateTime.MinValue;
+                    break;
             }
 
             //Set Customer info fields

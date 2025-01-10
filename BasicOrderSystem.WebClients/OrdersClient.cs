@@ -1,4 +1,5 @@
-﻿using BasicOrderSystem.WebContracts;
+﻿using BasicOrderSystem.Models;
+using BasicOrderSystem.WebContracts;
 
 namespace BasicOrderSystem.WebClients
 {
@@ -13,10 +14,9 @@ namespace BasicOrderSystem.WebClients
         {
             return await GetResponse<GetCustomersResponse>(ControllerRoute + "GetCustomers");
         }
-
-        public async Task<GetOrdersResponse> GetOrdersAsync(DateTime fromDate, DateTime toDate)
+        public async Task<GetOrdersResponse> GetOrdersAsync(DateTime fromDate, DateTime toDate, OrderStatus orderStatus)
         {
-            return await GetResponse<GetOrdersResponse>(ControllerRoute + $"GetOrders?fromDate={fromDate}&toDate={toDate}");
+            return await GetResponse<GetOrdersResponse>(ControllerRoute + $"GetOrders?fromDate={fromDate}&toDate={toDate}&orderStatus={(int)orderStatus}");
         }
         public async Task<GetOrderInfoResponse> GetOrderInfoAsync(int orderID)
         {

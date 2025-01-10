@@ -36,12 +36,12 @@ namespace BasicOrderSystem.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<GetOrdersResponse> GetOrdersAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken)
+        public async Task<GetOrdersResponse> GetOrdersAsync(DateTime fromDate, DateTime toDate, OrderStatus orderStatus, CancellationToken cancellationToken)
         {
             GetOrdersResponse response = new();
             try
             {
-                response.Orders = await _orderRetriever.GetOrdersAsync(fromDate, toDate, cancellationToken);
+                response.Orders = await _orderRetriever.GetOrdersAsync(fromDate, toDate, orderStatus, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -57,9 +57,7 @@ namespace BasicOrderSystem.WebAPI.Controllers
             GetOrderInfoResponse response = new();
             try
             {
-                KeyValuePair<Order, Customer> orderInfo = await _orderRetriever.GetOrderInfoAsync(orderID, cancellationToken);
-                response.Order = orderInfo.Key;
-                response.Customer = orderInfo.Value;
+                response.OrderInfo = await _orderRetriever.GetOrderInfoAsync(orderID, cancellationToken);
             }
             catch (Exception ex)
             {
