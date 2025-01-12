@@ -1,0 +1,24 @@
+version: '3.4'
+services:
+  basicordersystem-webapi:
+    image: 192.168.8.226:5000/basicordersystem-webapi-development:latest
+    build:
+      context: .
+      dockerfile: BasicOrderSystem.WebAPI/Dockerfile
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
+    env_file:
+      - path: "basicordersystem-webapi-development.env"
+        required: false
+    ports:
+      - 5275:5275
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+    logging:
+      driver: json-file
+      options:
+        max-size: 1024k
+        max-file: '3'
