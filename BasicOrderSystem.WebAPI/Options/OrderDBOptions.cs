@@ -9,5 +9,6 @@ namespace BasicOrderSystem.WebAPI.Options
         public string GetCustomersStoredProcedure { get; set; }
         public string GetOrdersStoredProcedure { get; set; }
         public string GetOrderInfoStoredProcedure { get; set; }
+        public string UpdateOrderInfoStoredProcedure { get; set; }
     }
 }

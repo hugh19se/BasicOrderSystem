@@ -34,11 +34,12 @@ namespace BasicOrderSystem.WindowsForms
             switch (OrderInfo.Status)
             {
                 case OrderStatus.Created:
-                NotDeliveredRadioButton.Checked = true;
-                OrderDeliveredDatePicker.Enabled = false;
+                    NotDeliveredRadioButton.Checked = true;
+                    OrderDeliveredDatePicker.Enabled = false;
                     break;
                 case OrderStatus.Delivered:
-                OrderDeliveredDatePicker.Value = OrderInfo.OrderDelivered ?? DateTime.MinValue;
+                    DeliveredRadioButton.Checked = true;
+                    OrderDeliveredDatePicker.Value = OrderInfo.OrderDelivered ?? DateTime.MinValue;
                     break;
             }
 
@@ -61,13 +62,24 @@ namespace BasicOrderSystem.WindowsForms
         }
         private void CancelChangesButton_Click(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.Cancel;
             Close();
         }
 
-        private void SaveChangesButton_Click(object sender, EventArgs e)
+        private async void SaveChangesButton_Click(object sender, EventArgs e)
         {
-            //save info
+            //Determine order status
+            OrderStatus orderStatus = OrderStatus.Created;
+            DateTime? dateDelivered = null;
+            if (DeliveredRadioButton.Checked)
+            {
+                orderStatus = OrderStatus.Delivered;
+                dateDelivered = OrderDeliveredDatePicker.Value;
 
+            }
+
+            await Program.OrdersClient.UpdateOrderInfoAsync(OrderInfo.OrderID, orderStatus, dateDelivered);
+            DialogResult = DialogResult.OK;
             MessageBox.Show("Changes Saved Successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Close();
         }

@@ -67,5 +67,21 @@ namespace BasicOrderSystem.WebAPI.Controllers
             }
             return response;
         }
+        [HttpPost]
+        public async Task<UpdateOrderInfoResponse> UpdateOrderInfoAsync([FromBody] UpdateOrderInfoRequest orderInfo, CancellationToken cancellationToken)
+        {
+            UpdateOrderInfoResponse response = new();
+            try
+            {
+                await _orderRetriever.UpdateOrderInfoAsync(orderInfo.OrderID, orderInfo.Status, orderInfo.OrderDelivered, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In: " + nameof(UpdateOrderInfoAsync));
+                response.HasError = true;
+                response.ErrorMessage = ex.Message;
+            }
+            return response;
+        }
     }
 }

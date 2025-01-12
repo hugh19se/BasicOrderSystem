@@ -51,5 +51,17 @@ namespace BasicOrderSystem.WebAPI.Services
                 throw;
             }
         }
+        public async Task UpdateOrderInfoAsync(int orderID, OrderStatus status, DateTime? orderDelivered, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _orderDBRepositoryDataAccess.UpdateOrderInfoAsync(orderID, status, orderDelivered, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In " + nameof(UpdateOrderInfoAsync));
+                throw;
+            }
+        }
     }
 }

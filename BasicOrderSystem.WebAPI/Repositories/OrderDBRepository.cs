@@ -169,5 +169,30 @@ namespace BasicOrderSystem.WebAPI.Repositories
             }
             return orderInfo;
         }
+        public async Task UpdateOrderInfoAsync(int orderID, OrderStatus status, DateTime? orderDelivered, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string connectionString = _connectionStringBuilder.GetConnectionString(_orderDBOptions.ConnectionString);
+                using (SqlConnection sqlConnection = new(connectionString))
+                using (SqlCommand sqlCmd = sqlConnection.CreateCommand())
+                {
+                    sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCmd.CommandText = _orderDBOptions.UpdateOrderInfoStoredProcedure;
+
+                    sqlCmd.Parameters.Add(new SqlParameter("@OrderID", orderID));
+                    sqlCmd.Parameters.Add(new SqlParameter("@Status", status));
+                    sqlCmd.Parameters.Add(new SqlParameter("@OrderDelivered", orderDelivered));
+
+                    await sqlConnection.OpenAsync(cancellationToken);
+                    await sqlCmd.ExecuteNonQueryAsync(cancellationToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION IN " + nameof(UpdateOrderInfoAsync));
+                throw;
+            }
+        }
     }
 }
