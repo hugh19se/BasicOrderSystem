@@ -4,6 +4,7 @@ using BasicOrderSystem.WebAPI.Options;
 using Microsoft.Extensions.Options;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace BasicOrderSystem.WebAPI.Services
 {
@@ -46,7 +47,7 @@ namespace BasicOrderSystem.WebAPI.Services
                 IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
 
                 //Filter orders based on date range and order status
-                IList<Order>? filteredOrders = orders.Where(x => x.OrderPlaced >= fromDate && x.OrderPlaced <= toDate && x.Status == orderStatus).ToList();
+                IList<Order>? filteredOrders = orders.Where(x => x.OrderPlaced >= fromDate && x.OrderPlaced <= toDate && (x.Status == orderStatus || orderStatus == OrderStatus.All)).ToList();
 
                 return filteredOrders;
             }
@@ -84,6 +85,45 @@ namespace BasicOrderSystem.WebAPI.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "EXCEPTION In " + nameof(GetOrdersAsync));
+                throw;
+            }
+        }
+        public async Task UpdateOrderInfoAsync(int orderID, OrderStatus status, DateTime? orderDelivered, CancellationToken cancellationToken)
+        {
+            try
+            {
+                //Get orders
+                string ordersText = await File.ReadAllTextAsync(_orderRetrieverOptions.OrdersPath, cancellationToken);
+                byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
+                MemoryStream ordersMemoryStream = new(ordersBytes);
+                IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
+
+                //Get order we want to modify from list of orders
+                Order order = orders.Where(x => x.OrderID == orderID).FirstOrDefault();
+
+                //Remove the existing order
+                orders.Remove(order);
+
+                //Modify order data
+                order.Status = status;
+                order.OrderDelivered = orderDelivered;
+
+                //Add modified order back to orders list
+                orders.Add(order);
+
+                //Reorder orders by Order ID ascending
+                orders = orders.OrderBy(x => x.OrderID).ToList();
+
+                //Write updated orders object to JSON file
+                JsonTypeInfo<IList<Order>> ordersJsonTypeInfo = JsonTypeInfo.CreateJsonTypeInfo<IList<Order>>(JsonSerializerOptions.Default);
+                await using (FileStream writeStream = File.Create(_orderRetrieverOptions.OrdersPath))
+                {
+                    await JsonSerializer.SerializeAsync(writeStream, orders, ordersJsonTypeInfo, cancellationToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In " + nameof(UpdateOrderInfoAsync));
                 throw;
             }
         }

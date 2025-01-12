@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace BasicOrderSystem.WebClients
 {
@@ -33,6 +34,12 @@ namespace BasicOrderSystem.WebClients
             TResponseType? result = JsonSerializer.Deserialize<TResponseType>(stream);
 
             return result;
+        }
+
+        protected async Task PostRequest<TRequestType> (string path, TRequestType requestBody)
+        {
+            HttpResponseMessage response = await HttpClient.PostAsJsonAsync(path, requestBody);
+            response.EnsureSuccessStatusCode();
         }
 
         public void Dispose()

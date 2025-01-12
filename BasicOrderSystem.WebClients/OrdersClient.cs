@@ -22,5 +22,16 @@ namespace BasicOrderSystem.WebClients
         {
             return await GetResponse<GetOrderInfoResponse>(ControllerRoute + $"GetOrderInfo?orderID={orderID}");
         }
+        public async Task UpdateOrderInfoAsync(int orderID, OrderStatus orderStatus, DateTime? orderDelivered)
+        {
+            UpdateOrderInfoRequest updateOrderInfoRequestBody = new()
+            {
+                OrderID = orderID,
+                Status = orderStatus,
+                OrderDelivered = orderDelivered
+            };
+
+            await PostRequest<UpdateOrderInfoRequest>(ControllerRoute + "UpdateOrderInfo", updateOrderInfoRequestBody);
+        }
     }
 }

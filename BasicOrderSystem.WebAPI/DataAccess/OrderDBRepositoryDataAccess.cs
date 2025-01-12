@@ -24,5 +24,9 @@ namespace BasicOrderSystem.WebAPI.DataAccess
         {
             return await _orderDBRepository.GetOrderInfoAsync(orderID, cancellationToken);
         }
+        public async Task UpdateOrderInfoAsync(int orderID, OrderStatus status, DateTime? orderDelivered, CancellationToken cancellationToken)
+        {
+            await _orderDBRepository.UpdateOrderInfoAsync(orderID, status, orderDelivered, cancellationToken);
+        }
     }
 }
