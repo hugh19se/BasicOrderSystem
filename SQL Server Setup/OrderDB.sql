@@ -1,6 +1,6 @@
 USE [OrderDB]
 GO
-/****** Object:  Table [dbo].[Customers]    Script Date: 1/10/2025 12:28:19 PM ******/
+/****** Object:  Table [dbo].[Customers]    Script Date: 1/12/2025 10:35:25 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -20,7 +20,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 1/10/2025 12:28:19 PM ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 1/12/2025 10:35:25 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -38,7 +38,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OrderStatuses]    Script Date: 1/10/2025 12:28:19 PM ******/
+/****** Object:  Table [dbo].[OrderStatuses]    Script Date: 1/12/2025 10:35:25 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -104,7 +104,7 @@ SET IDENTITY_INSERT [dbo].[Orders] ON
 GO
 INSERT [dbo].[Orders] ([OrderID], [CustomerID], [Status], [Total], [OrderPlaced], [OrderDelivered]) VALUES (1, 12, 1, CAST(19.55 AS Decimal(18, 2)), CAST(N'2024-08-21T19:28:21.000' AS DateTime), NULL)
 GO
-INSERT [dbo].[Orders] ([OrderID], [CustomerID], [Status], [Total], [OrderPlaced], [OrderDelivered]) VALUES (2, 19, 1, CAST(9.97 AS Decimal(18, 2)), CAST(N'2024-01-15T20:05:10.000' AS DateTime), NULL)
+INSERT [dbo].[Orders] ([OrderID], [CustomerID], [Status], [Total], [OrderPlaced], [OrderDelivered]) VALUES (2, 19, 2, CAST(9.97 AS Decimal(18, 2)), CAST(N'2024-01-15T20:05:10.000' AS DateTime), CAST(N'2025-01-12T09:15:27.827' AS DateTime))
 GO
 INSERT [dbo].[Orders] ([OrderID], [CustomerID], [Status], [Total], [OrderPlaced], [OrderDelivered]) VALUES (3, 6, 1, CAST(13.94 AS Decimal(18, 2)), CAST(N'2023-07-17T07:04:13.000' AS DateTime), NULL)
 GO
@@ -311,7 +311,7 @@ GO
 ALTER TABLE [dbo].[Orders]  WITH CHECK ADD FOREIGN KEY([CustomerID])
 REFERENCES [dbo].[Customers] ([CustomerID])
 GO
-/****** Object:  StoredProcedure [dbo].[GetCustomers]    Script Date: 1/10/2025 12:28:19 PM ******/
+/****** Object:  StoredProcedure [dbo].[GetCustomers]    Script Date: 1/12/2025 10:35:26 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -332,7 +332,7 @@ FROM
 Customers c
 END
 GO
-/****** Object:  StoredProcedure [dbo].[GetOrderInfo]    Script Date: 1/10/2025 12:28:19 PM ******/
+/****** Object:  StoredProcedure [dbo].[GetOrderInfo]    Script Date: 1/12/2025 10:35:26 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -367,7 +367,7 @@ WHERE
 	o.OrderID = @OrderID
 END
 GO
-/****** Object:  StoredProcedure [dbo].[GetOrders]    Script Date: 1/10/2025 12:28:19 PM ******/
+/****** Object:  StoredProcedure [dbo].[GetOrders]    Script Date: 1/12/2025 10:35:26 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -392,6 +392,32 @@ FROM
 WHERE
 	o.OrderPlaced >= @FromDate AND
 	o.OrderPlaced <= @ToDate AND
-	o.[Status] = @OrderStatus
+	(
+		o.[Status] = @OrderStatus OR
+		@OrderStatus = 0
+	)
 END
+GO
+/****** Object:  StoredProcedure [dbo].[UpdateOrderInfo]    Script Date: 1/12/2025 10:35:26 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[UpdateOrderInfo]
+(
+	@OrderID INT
+	, @Status INT
+	, @OrderDelivered DATETIME = NULL
+)
+AS
+BEGIN
+UPDATE
+	Orders
+SET
+	[Status] = @Status
+	, OrderDelivered = @OrderDelivered
+WHERE
+	OrderID = @OrderID
+END
+
 GO
