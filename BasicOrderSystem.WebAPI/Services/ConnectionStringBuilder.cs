@@ -16,6 +16,11 @@ namespace BasicOrderSystem.WebAPI.Services
                 TrustServerCertificate = true
             };
 
+            if (string.IsNullOrEmpty(connectionStringConfig.Password))
+            {
+                connectionStringConfig.Password = Environment.GetEnvironmentVariable("ORDERDB_PASSWORD");   
+            }
+
             if (!string.IsNullOrWhiteSpace(connectionStringConfig.Username))
             {
                 connectionStringBuilder.IntegratedSecurity = false;
