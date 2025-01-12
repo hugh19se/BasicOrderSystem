@@ -47,7 +47,7 @@ namespace BasicOrderSystem.WebAPI.Services
                 IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
 
                 //Filter orders based on date range and order status
-                IList<Order>? filteredOrders = orders.Where(x => x.OrderPlaced >= fromDate && x.OrderPlaced <= toDate && x.Status == orderStatus).ToList();
+                IList<Order>? filteredOrders = orders.Where(x => x.OrderPlaced >= fromDate && x.OrderPlaced <= toDate && (x.Status == orderStatus || orderStatus == OrderStatus.All)).ToList();
 
                 return filteredOrders;
             }
