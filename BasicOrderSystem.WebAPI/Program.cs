@@ -16,11 +16,20 @@ builder.Services.Configure<JSONOrderRetrieverOptions>(builder.Configuration.GetS
 builder.Services.Configure<OrderDBOptions>(builder.Configuration.GetSection(OrderDBOptions.ConfigBinding));
 
 //Add Services
-/*
-IOrderRetriever uses JSONOrderRetriever to simulate db calls as I can't reasonably host a SQL Server instance for this project
-If you want to test the SQL Server capability in SQLServerOrderRetriever, follow the guide in the repo wiki to set up and configure your own instance.
- */
-builder.Services.AddTransient<IOrderRetriever, JSONOrderRetriever>();//Can change from JSON to OrderDB here
+
+string orderDBDriver = builder.Configuration.GetValue<string>("OrderDBDriver") ?? "JSON";
+switch (orderDBDriver)
+{
+    case "SQLServer":
+        builder.Services.AddTransient<IOrderRetriever, SQLServerOrderRetriever>();
+        break;
+    case "JSON":
+        builder.Services.AddTransient<IOrderRetriever, JSONOrderRetriever>();
+        break;
+    default:
+        break;
+}
+
 builder.Services.AddTransient<IConnectionStringBuilder, ConnectionStringBuilder>();
 
 //Add Data Access
