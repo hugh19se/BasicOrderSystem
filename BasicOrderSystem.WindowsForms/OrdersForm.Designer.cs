@@ -111,13 +111,14 @@
             // 
             // OrdersListView
             // 
+            OrdersListView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             OrdersListView.Columns.AddRange(new ColumnHeader[] { OrderIDHeader, CustomerIDHeader, StatusHeader, TotalHeader, OrderPlacedHeader, OrderDeliveredHeader });
             OrdersListView.ContextMenuStrip = OrdersContextMenu;
             OrdersListView.FullRowSelect = true;
             OrdersListView.Location = new Point(12, 56);
             OrdersListView.MultiSelect = false;
             OrdersListView.Name = "OrdersListView";
-            OrdersListView.Size = new Size(776, 226);
+            OrdersListView.Size = new Size(776, 227);
             OrdersListView.TabIndex = 7;
             OrdersListView.UseCompatibleStateImageBehavior = false;
             OrdersListView.View = View.Details;
@@ -173,7 +174,8 @@
             // 
             // CreateOrderButton
             // 
-            CreateOrderButton.Location = new Point(12, 288);
+            CreateOrderButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            CreateOrderButton.Location = new Point(12, 289);
             CreateOrderButton.Name = "CreateOrderButton";
             CreateOrderButton.Size = new Size(97, 23);
             CreateOrderButton.TabIndex = 8;
@@ -185,7 +187,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(800, 324);
             Controls.Add(CreateOrderButton);
             Controls.Add(OrdersListView);
             Controls.Add(SearchButton);
