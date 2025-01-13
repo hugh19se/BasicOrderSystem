@@ -45,6 +45,8 @@
             OrderDeliveredHeader = new ColumnHeader();
             OrdersContextMenu = new ContextMenuStrip(components);
             OrderInfoMenuItem = new ToolStripMenuItem();
+            DeleteOrderMenuItem = new ToolStripMenuItem();
+            CreateOrderButton = new Button();
             OrdersContextMenu.SuspendLayout();
             SuspendLayout();
             // 
@@ -151,22 +153,40 @@
             // 
             // OrdersContextMenu
             // 
-            OrdersContextMenu.Items.AddRange(new ToolStripItem[] { OrderInfoMenuItem });
+            OrdersContextMenu.Items.AddRange(new ToolStripItem[] { OrderInfoMenuItem, DeleteOrderMenuItem });
             OrdersContextMenu.Name = "OrdersContextMenu";
-            OrdersContextMenu.Size = new Size(129, 26);
+            OrdersContextMenu.Size = new Size(141, 48);
             // 
             // OrderInfoMenuItem
             // 
             OrderInfoMenuItem.Name = "OrderInfoMenuItem";
-            OrderInfoMenuItem.Size = new Size(128, 22);
+            OrderInfoMenuItem.Size = new Size(140, 22);
             OrderInfoMenuItem.Text = "Order Info";
             OrderInfoMenuItem.Click += OrderInfoMenuItem_Click;
+            // 
+            // DeleteOrderMenuItem
+            // 
+            DeleteOrderMenuItem.Name = "DeleteOrderMenuItem";
+            DeleteOrderMenuItem.Size = new Size(140, 22);
+            DeleteOrderMenuItem.Text = "Delete Order";
+            DeleteOrderMenuItem.Click += DeleteOrderMenuItem_Click;
+            // 
+            // CreateOrderButton
+            // 
+            CreateOrderButton.Location = new Point(12, 288);
+            CreateOrderButton.Name = "CreateOrderButton";
+            CreateOrderButton.Size = new Size(97, 23);
+            CreateOrderButton.TabIndex = 8;
+            CreateOrderButton.Text = "Create Order";
+            CreateOrderButton.UseVisualStyleBackColor = true;
+            CreateOrderButton.Click += CreateOrderButton_Click;
             // 
             // OrdersForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(CreateOrderButton);
             Controls.Add(OrdersListView);
             Controls.Add(SearchButton);
             Controls.Add(StatusLabel);
@@ -201,5 +221,7 @@
         private ColumnHeader OrderDeliveredHeader;
         private ContextMenuStrip OrdersContextMenu;
         private ToolStripMenuItem OrderInfoMenuItem;
+        private ToolStripMenuItem DeleteOrderMenuItem;
+        private Button CreateOrderButton;
     }
 }

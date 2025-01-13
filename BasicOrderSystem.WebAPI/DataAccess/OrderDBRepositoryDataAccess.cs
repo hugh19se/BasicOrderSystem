@@ -28,5 +28,13 @@ namespace BasicOrderSystem.WebAPI.DataAccess
         {
             await _orderDBRepository.UpdateOrderInfoAsync(orderID, status, orderDelivered, cancellationToken);
         }
+        public async Task CreateOrderAsync(float total, int customerID, CancellationToken cancellationToken)
+        {
+            await _orderDBRepository.CreateOrderAsync(total, customerID, cancellationToken);
+        }
+        public async Task DeleteOrderAsync(int orderID, CancellationToken cancellationToken)
+        {
+            await _orderDBRepository.DeleteOrderAsync(orderID, cancellationToken);
+        }
     }
 }

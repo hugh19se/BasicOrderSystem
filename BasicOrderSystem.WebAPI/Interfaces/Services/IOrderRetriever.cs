@@ -9,5 +9,7 @@ namespace BasicOrderSystem.WebAPI.Interfaces.Services
         //Look at adding options for status, customer and order ID
         Task<OrderInfo> GetOrderInfoAsync(int orderID, CancellationToken cancellationToken);
         Task UpdateOrderInfoAsync(int orderID, OrderStatus status, DateTime? orderDelivered, CancellationToken cancellationToken);
+        Task CreateOrderAsync(float total, int customerID, CancellationToken cancellationToken);
+        Task DeleteOrderAsync(int orderID, CancellationToken cancellationToken);
     }
 }

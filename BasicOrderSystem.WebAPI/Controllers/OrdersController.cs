@@ -83,5 +83,39 @@ namespace BasicOrderSystem.WebAPI.Controllers
             }
             return response;
         }
+
+        [HttpPut]
+        public async Task<CreateOrderResponse> CreateOrderAsync([FromBody] CreateOrderRequest orderRequest, CancellationToken cancellationToken)
+        {
+            CreateOrderResponse response = new();
+            try
+            {
+                await _orderRetriever.CreateOrderAsync(orderRequest.Total, orderRequest.CustomerID, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In: " + nameof(CreateOrderAsync));
+                response.HasError = true;
+                response.ErrorMessage = ex.Message;
+            }
+            return response;
+        }
+
+        [HttpDelete]
+        public async Task<DeleteOrderResponse> DeleteOrderAsync(int orderID, CancellationToken cancellationToken)
+        {
+            DeleteOrderResponse response = new();
+            try
+            {
+                await _orderRetriever.DeleteOrderAsync(orderID, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In: " + nameof(DeleteOrderAsync));
+                response.HasError = true;
+                response.ErrorMessage = ex.Message;
+            }
+            return response;
+        }
     }
 }

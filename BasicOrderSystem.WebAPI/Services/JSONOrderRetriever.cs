@@ -127,5 +127,76 @@ namespace BasicOrderSystem.WebAPI.Services
                 throw;
             }
         }
+        public async Task CreateOrderAsync(float total, int customerID, CancellationToken cancellationToken)
+        {
+            try
+            {
+                //Get orders
+                string ordersText = await File.ReadAllTextAsync(_orderRetrieverOptions.OrdersPath, cancellationToken);
+                byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
+                MemoryStream ordersMemoryStream = new(ordersBytes);
+                IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
+
+                //Create new order object
+                Order orderToAdd = new()
+                {
+                    OrderID = orders.Count + 1,
+                    CustomerID = customerID,
+                    Status = OrderStatus.Created,
+                    Total = total,
+                    OrderPlaced = DateTime.Now
+                };
+
+                //Add new order to orders list
+                orders.Add(orderToAdd);
+
+                //Reorder orders by Order ID ascending
+                orders = orders.OrderBy(x => x.OrderID).ToList();
+
+                //Write updated orders object to JSON file
+                JsonTypeInfo<IList<Order>> ordersJsonTypeInfo = JsonTypeInfo.CreateJsonTypeInfo<IList<Order>>(JsonSerializerOptions.Default);
+                await using (FileStream writeStream = File.Create(_orderRetrieverOptions.OrdersPath))
+                {
+                    await JsonSerializer.SerializeAsync(writeStream, orders, ordersJsonTypeInfo, cancellationToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In " + nameof(CreateOrderAsync));
+                throw;
+            }
+        }
+        public async Task DeleteOrderAsync(int orderID, CancellationToken cancellationToken)
+        {
+            try
+            {
+                //Get orders
+                string ordersText = await File.ReadAllTextAsync(_orderRetrieverOptions.OrdersPath, cancellationToken);
+                byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
+                MemoryStream ordersMemoryStream = new(ordersBytes);
+                IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
+
+                //Get order to remove
+                Order orderToRemove = orders.Where(x => x.OrderID == orderID).FirstOrDefault();
+
+                //Remove order from list
+                orders.Remove(orderToRemove);
+
+                //Reorder orders by Order ID ascending
+                orders = orders.OrderBy(x => x.OrderID).ToList();
+
+                //Write updated orders object to JSON file
+                JsonTypeInfo<IList<Order>> ordersJsonTypeInfo = JsonTypeInfo.CreateJsonTypeInfo<IList<Order>>(JsonSerializerOptions.Default);
+                await using (FileStream writeStream = File.Create(_orderRetrieverOptions.OrdersPath))
+                {
+                    await JsonSerializer.SerializeAsync(writeStream, orders, ordersJsonTypeInfo, cancellationToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In " + nameof(DeleteOrderAsync));
+                throw;
+            }
+        }
     }
 }
