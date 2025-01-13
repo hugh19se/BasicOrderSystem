@@ -80,7 +80,7 @@
             Controls.Add(OkButton);
             Controls.Add(BaseAddressTextBox);
             Controls.Add(EnterBaseAddressLabel);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "BaseAddressPromptForm";

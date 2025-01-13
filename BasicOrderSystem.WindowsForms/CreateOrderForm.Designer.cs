@@ -101,6 +101,7 @@
             Controls.Add(OrderTotalLabel);
             Controls.Add(CustomerIDTextBox);
             Controls.Add(CustomerIDLabel);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "CreateOrderForm";
             Text = "Create Order";
             ResumeLayout(false);
