@@ -23,12 +23,8 @@ namespace BasicOrderSystem.WebAPI.Services
         {
 			try
 			{
-                //get customers
-                string customersText = await File.ReadAllTextAsync(_orderRetrieverOptions.CustomersPath, cancellationToken);
-                byte[] customersBytes = Encoding.UTF8.GetBytes(customersText);
-                MemoryStream customersMemoryStream = new(customersBytes);
-                IList<Customer>? customers = await JsonSerializer.DeserializeAsync<IList<Customer>>(customersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
-                return customers;
+                //Get customers
+                return await ReadCustomerDataAsync(cancellationToken);
 			}
 			catch (Exception ex)
 			{
@@ -41,13 +37,14 @@ namespace BasicOrderSystem.WebAPI.Services
             try
             {
                 //Get orders
-                string ordersText = await File.ReadAllTextAsync(_orderRetrieverOptions.OrdersPath, cancellationToken);
-                byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
-                MemoryStream ordersMemoryStream = new(ordersBytes);
-                IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
+                IList<Order>? orders = await ReadOrderDataAsync(cancellationToken);
 
                 //Filter orders based on date range and order status
-                IList<Order>? filteredOrders = orders.Where(x => x.OrderPlaced >= fromDate && x.OrderPlaced <= toDate && (x.Status == orderStatus || orderStatus == OrderStatus.All)).ToList();
+                IList<Order>? filteredOrders = orders.Where(
+                    x => x.OrderPlaced >= fromDate &&
+                    x.OrderPlaced <= toDate &&
+                    (x.Status == orderStatus || orderStatus == OrderStatus.All)
+                ).ToList();
 
                 return filteredOrders;
             }
@@ -62,19 +59,13 @@ namespace BasicOrderSystem.WebAPI.Services
             try
             {
                 //Get orders
-                string ordersText = await File.ReadAllTextAsync(_orderRetrieverOptions.OrdersPath, cancellationToken);
-                byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
-                MemoryStream ordersMemoryStream = new(ordersBytes);
-                IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
+                IList<Order>? orders = await ReadOrderDataAsync(cancellationToken);
 
                 //Get customers
-                string customersText = await File.ReadAllTextAsync(_orderRetrieverOptions.CustomersPath, cancellationToken);
-                byte[] customersBytes = Encoding.UTF8.GetBytes(customersText);
-                MemoryStream customersMemoryStream = new(customersBytes);
-                IList<Customer>? customers = await JsonSerializer.DeserializeAsync<IList<Customer>>(customersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
+                IList<Customer>? customers = await ReadCustomerDataAsync(cancellationToken);
 
-                Order order = orders.Where(x => x.OrderID == orderID).FirstOrDefault();
-                Customer orderCustomer = customers.Where(x => x.CustomerID == order.CustomerID).FirstOrDefault();
+                Order order = orders.FirstOrDefault(x => x.OrderID == orderID);
+                Customer orderCustomer = customers.FirstOrDefault(x => x.CustomerID == order.CustomerID);
 
                 return new OrderInfo()
                 {
@@ -93,13 +84,10 @@ namespace BasicOrderSystem.WebAPI.Services
             try
             {
                 //Get orders
-                string ordersText = await File.ReadAllTextAsync(_orderRetrieverOptions.OrdersPath, cancellationToken);
-                byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
-                MemoryStream ordersMemoryStream = new(ordersBytes);
-                IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
+                IList<Order>? orders = await ReadOrderDataAsync(cancellationToken);
 
                 //Get order we want to modify from list of orders
-                Order order = orders.Where(x => x.OrderID == orderID).FirstOrDefault();
+                Order order = orders.FirstOrDefault(x => x.OrderID == orderID);
 
                 //Remove the existing order
                 orders.Remove(order);
@@ -115,11 +103,7 @@ namespace BasicOrderSystem.WebAPI.Services
                 orders = orders.OrderBy(x => x.OrderID).ToList();
 
                 //Write updated orders object to JSON file
-                JsonTypeInfo<IList<Order>> ordersJsonTypeInfo = JsonTypeInfo.CreateJsonTypeInfo<IList<Order>>(JsonSerializerOptions.Default);
-                await using (FileStream writeStream = File.Create(_orderRetrieverOptions.OrdersPath))
-                {
-                    await JsonSerializer.SerializeAsync(writeStream, orders, ordersJsonTypeInfo, cancellationToken);
-                }
+                await WriteJsonToFileAsync<IList<Order>?>(orders, _orderRetrieverOptions.OrdersPath, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -132,10 +116,7 @@ namespace BasicOrderSystem.WebAPI.Services
             try
             {
                 //Get orders
-                string ordersText = await File.ReadAllTextAsync(_orderRetrieverOptions.OrdersPath, cancellationToken);
-                byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
-                MemoryStream ordersMemoryStream = new(ordersBytes);
-                IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
+                IList<Order>? orders = await ReadOrderDataAsync(cancellationToken);
 
                 //Create new order object
                 Order orderToAdd = new()
@@ -154,11 +135,7 @@ namespace BasicOrderSystem.WebAPI.Services
                 orders = orders.OrderBy(x => x.OrderID).ToList();
 
                 //Write updated orders object to JSON file
-                JsonTypeInfo<IList<Order>> ordersJsonTypeInfo = JsonTypeInfo.CreateJsonTypeInfo<IList<Order>>(JsonSerializerOptions.Default);
-                await using (FileStream writeStream = File.Create(_orderRetrieverOptions.OrdersPath))
-                {
-                    await JsonSerializer.SerializeAsync(writeStream, orders, ordersJsonTypeInfo, cancellationToken);
-                }
+                await WriteJsonToFileAsync<IList<Order>?>(orders, _orderRetrieverOptions.OrdersPath, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -171,13 +148,10 @@ namespace BasicOrderSystem.WebAPI.Services
             try
             {
                 //Get orders
-                string ordersText = await File.ReadAllTextAsync(_orderRetrieverOptions.OrdersPath, cancellationToken);
-                byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
-                MemoryStream ordersMemoryStream = new(ordersBytes);
-                IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
+                IList<Order>? orders = await ReadOrderDataAsync(cancellationToken);
 
                 //Get order to remove
-                Order orderToRemove = orders.Where(x => x.OrderID == orderID).FirstOrDefault();
+                Order orderToRemove = orders.FirstOrDefault(x => x.OrderID == orderID);
 
                 //Remove order from list
                 orders.Remove(orderToRemove);
@@ -186,16 +160,36 @@ namespace BasicOrderSystem.WebAPI.Services
                 orders = orders.OrderBy(x => x.OrderID).ToList();
 
                 //Write updated orders object to JSON file
-                JsonTypeInfo<IList<Order>> ordersJsonTypeInfo = JsonTypeInfo.CreateJsonTypeInfo<IList<Order>>(JsonSerializerOptions.Default);
-                await using (FileStream writeStream = File.Create(_orderRetrieverOptions.OrdersPath))
-                {
-                    await JsonSerializer.SerializeAsync(writeStream, orders, ordersJsonTypeInfo, cancellationToken);
-                }
+                await WriteJsonToFileAsync<IList<Order>?>(orders, _orderRetrieverOptions.OrdersPath, cancellationToken);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "EXCEPTION In " + nameof(DeleteOrderAsync));
                 throw;
+            }
+        }
+        private async Task<IList<Order>?> ReadOrderDataAsync(CancellationToken cancellationToken)
+        {
+            string ordersText = await File.ReadAllTextAsync(_orderRetrieverOptions.OrdersPath, cancellationToken);
+            byte[] ordersBytes = Encoding.UTF8.GetBytes(ordersText);
+            MemoryStream ordersMemoryStream = new(ordersBytes);
+            IList<Order>? orders = await JsonSerializer.DeserializeAsync<IList<Order>>(ordersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
+            return orders;
+        }
+        private async Task<IList<Customer>?> ReadCustomerDataAsync(CancellationToken cancellationToken)
+        {
+            string customersText = await File.ReadAllTextAsync(_orderRetrieverOptions.CustomersPath, cancellationToken);
+            byte[] customersBytes = Encoding.UTF8.GetBytes(customersText);
+            MemoryStream customersMemoryStream = new(customersBytes);
+            IList<Customer>? customers = await JsonSerializer.DeserializeAsync<IList<Customer>>(customersMemoryStream, JsonSerializerOptions.Default, cancellationToken);
+            return customers;
+        }
+        private async Task WriteJsonToFileAsync<TDataType>(TDataType dataToWrite, string filePath, CancellationToken cancellationToken)
+        {
+            JsonTypeInfo<TDataType> jsonTypeInfo = JsonTypeInfo.CreateJsonTypeInfo<TDataType>(JsonSerializerOptions.Default);
+            await using (FileStream writeStream = File.Create(filePath))
+            {
+                await JsonSerializer.SerializeAsync(writeStream, dataToWrite, jsonTypeInfo, cancellationToken);
             }
         }
     }

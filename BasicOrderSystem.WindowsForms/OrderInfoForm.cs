@@ -1,13 +1,5 @@
 ﻿using BasicOrderSystem.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using Serilog;
 
 namespace BasicOrderSystem.WindowsForms
 {
@@ -25,32 +17,40 @@ namespace BasicOrderSystem.WindowsForms
 
         private void OrderInfoForm_Load(object sender, EventArgs e)
         {
-            //Set Order info fields
-            OrderIDTextBox.Text = OrderInfo.OrderID.ToString();
-            CustomerIDTextBox.Text = OrderInfo.CustomerID.ToString();
-            TotalTextBox.Text = "£" + OrderInfo.Total.ToString();
-            OrderPlacedDatePicker.Value = OrderInfo.OrderPlaced;
-            //Set up status radio buttons
-            switch (OrderInfo.Status)
+            try
             {
-                case OrderStatus.Created:
-                    NotDeliveredRadioButton.Checked = true;
-                    OrderDeliveredDatePicker.Enabled = false;
-                    break;
-                case OrderStatus.Delivered:
-                    DeliveredRadioButton.Checked = true;
-                    OrderDeliveredDatePicker.Value = OrderInfo.OrderDelivered ?? DateTime.MinValue;
-                    break;
-            }
+                //Set Order info fields
+                OrderIDTextBox.Text = OrderInfo.OrderID.ToString();
+                CustomerIDTextBox.Text = OrderInfo.CustomerID.ToString();
+                TotalTextBox.Text = "£" + OrderInfo.Total.ToString();
+                OrderPlacedDatePicker.Value = OrderInfo.OrderPlaced;
+                //Set up status radio buttons
+                switch (OrderInfo.Status)
+                {
+                    case OrderStatus.Created:
+                        NotDeliveredRadioButton.Checked = true;
+                        OrderDeliveredDatePicker.Enabled = false;
+                        break;
+                    case OrderStatus.Delivered:
+                        DeliveredRadioButton.Checked = true;
+                        OrderDeliveredDatePicker.Value = OrderInfo.OrderDelivered ?? DateTime.MinValue;
+                        break;
+                }
 
-            //Set Customer info fields
-            EmailTextBox.Text = CustomerInfo.Email;
-            ForenamesTextBox.Text = CustomerInfo.Forenames;
-            SurnameTextBox.Text = CustomerInfo.Surname;
-            Line1TextBox.Text = CustomerInfo.Line1;
-            Line2TextBox.Text = CustomerInfo.Line2;
-            CityTextBox.Text = CustomerInfo.City;
-            PostcodeTextBox.Text = CustomerInfo.Postcode;
+                //Set Customer info fields
+                EmailTextBox.Text = CustomerInfo.Email;
+                ForenamesTextBox.Text = CustomerInfo.Forenames;
+                SurnameTextBox.Text = CustomerInfo.Surname;
+                Line1TextBox.Text = CustomerInfo.Line1;
+                Line2TextBox.Text = CustomerInfo.Line2;
+                CityTextBox.Text = CustomerInfo.City;
+                PostcodeTextBox.Text = CustomerInfo.Postcode;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "EXCEPTION in " + nameof(OrderInfoForm_Load));
+                MessageBox.Show("An Error Occurred While Loading Order Information:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void NotDeliveredRadioButton_CheckedChanged(object sender, EventArgs e)
         {
@@ -68,20 +68,28 @@ namespace BasicOrderSystem.WindowsForms
 
         private async void SaveChangesButton_Click(object sender, EventArgs e)
         {
-            //Determine order status
-            OrderStatus orderStatus = OrderStatus.Created;
-            DateTime? dateDelivered = null;
-            if (DeliveredRadioButton.Checked)
+            try
             {
-                orderStatus = OrderStatus.Delivered;
-                dateDelivered = OrderDeliveredDatePicker.Value;
+                //Determine order status
+                OrderStatus orderStatus = OrderStatus.Created;
+                DateTime? dateDelivered = null;
+                if (DeliveredRadioButton.Checked)
+                {
+                    orderStatus = OrderStatus.Delivered;
+                    dateDelivered = OrderDeliveredDatePicker.Value;
 
+                }
+
+                await Program.OrdersClient.UpdateOrderInfoAsync(OrderInfo.OrderID, orderStatus, dateDelivered);
+                DialogResult = DialogResult.OK;
+                MessageBox.Show("Changes Saved Successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Close();
             }
-
-            await Program.OrdersClient.UpdateOrderInfoAsync(OrderInfo.OrderID, orderStatus, dateDelivered);
-            DialogResult = DialogResult.OK;
-            MessageBox.Show("Changes Saved Successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            Close();
+            catch (Exception ex)
+            {
+                Log.Error(ex, "EXCEPTION in " + nameof(SaveChangesButton_Click));
+                MessageBox.Show("An Error Occurred While Saving Changes:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
