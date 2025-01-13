@@ -27,14 +27,17 @@ namespace BasicOrderSystem.WebAPI.Repositories
             List<Customer> customers = new();
             try
             {
+                //Create database connection
                 string connectionString = _connectionStringBuilder.GetConnectionString(_orderDBOptions.ConnectionString);
                 using (SqlConnection sqlConnection = new(connectionString))
                 using (SqlCommand sqlCmd = sqlConnection.CreateCommand())
                 {
+                    //Configure command properties
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.GetCustomersStoredProcedure;
                     sqlCmd.CommandTimeout = _orderDBOptions.ConnectionString.CommandTimeout;
 
+                    //Execute command
                     await sqlConnection.OpenAsync(cancellationToken);
                     SqlDataReader dataReader = await sqlCmd.ExecuteReaderAsync(cancellationToken);
                     while (await dataReader.ReadAsync(cancellationToken))
@@ -65,18 +68,22 @@ namespace BasicOrderSystem.WebAPI.Repositories
             List<Order> orders = new();
             try
             {
+                //Create database connection
                 string connectionString = _connectionStringBuilder.GetConnectionString(_orderDBOptions.ConnectionString);
                 using (SqlConnection sqlConnection = new(connectionString))
                 using (SqlCommand sqlCmd = sqlConnection.CreateCommand())
                 {
+                    //Configure command properties
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.GetOrdersStoredProcedure;
                     sqlCmd.CommandTimeout = _orderDBOptions.ConnectionString.CommandTimeout;
 
+                    //Add command parameters
                     sqlCmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
                     sqlCmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
                     sqlCmd.Parameters.Add(new SqlParameter("@OrderStatus", orderStatus));
 
+                    //Execute command
                     await sqlConnection.OpenAsync(cancellationToken);
                     SqlDataReader dataReader = await sqlCmd.ExecuteReaderAsync(cancellationToken);
                     while (await dataReader.ReadAsync(cancellationToken))
@@ -113,14 +120,17 @@ namespace BasicOrderSystem.WebAPI.Repositories
             OrderInfo orderInfo = new();
             try
             {
+                //Create database connection
                 string connectionString = _connectionStringBuilder.GetConnectionString(_orderDBOptions.ConnectionString);
                 using (SqlConnection sqlConnection = new(connectionString))
                 using (SqlCommand sqlCmd = sqlConnection.CreateCommand())
                 {
+                    //Configure command properties
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.GetOrderInfoStoredProcedure;
                     sqlCmd.CommandTimeout = _orderDBOptions.ConnectionString.CommandTimeout;
 
+                    //Add command parameters
                     sqlCmd.Parameters.Add(new SqlParameter("@OrderID", orderID));
 
                     await sqlConnection.OpenAsync(cancellationToken);
@@ -176,18 +186,22 @@ namespace BasicOrderSystem.WebAPI.Repositories
         {
             try
             {
+                //Create database connection
                 string connectionString = _connectionStringBuilder.GetConnectionString(_orderDBOptions.ConnectionString);
                 using (SqlConnection sqlConnection = new(connectionString))
                 using (SqlCommand sqlCmd = sqlConnection.CreateCommand())
                 {
+                    //Configure command properties
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.UpdateOrderInfoStoredProcedure;
                     sqlCmd.CommandTimeout = _orderDBOptions.ConnectionString.CommandTimeout;
 
+                    //Add command parameters
                     sqlCmd.Parameters.Add(new SqlParameter("@OrderID", orderID));
                     sqlCmd.Parameters.Add(new SqlParameter("@Status", status));
                     sqlCmd.Parameters.Add(new SqlParameter("@OrderDelivered", orderDelivered));
 
+                    //Execute command
                     await sqlConnection.OpenAsync(cancellationToken);
                     await sqlCmd.ExecuteNonQueryAsync(cancellationToken);
                 }
@@ -202,17 +216,21 @@ namespace BasicOrderSystem.WebAPI.Repositories
         {
             try
             {
+                //Create database connection
                 string connectionString = _connectionStringBuilder.GetConnectionString(_orderDBOptions.ConnectionString);
                 using (SqlConnection sqlConnection = new(connectionString))
                 using (SqlCommand sqlCmd = sqlConnection.CreateCommand())
                 {
+                    //Configure command properties
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.CreateOrderStoredProcedure;
                     sqlCmd.CommandTimeout = _orderDBOptions.ConnectionString.CommandTimeout;
 
+                    //Add command parameters
                     sqlCmd.Parameters.Add(new SqlParameter("@Total", total));
                     sqlCmd.Parameters.Add(new SqlParameter("@CustomerID", customerID));
 
+                    //Execute command
                     await sqlConnection.OpenAsync(cancellationToken);
                     await sqlCmd.ExecuteNonQueryAsync(cancellationToken);
                 }
@@ -227,16 +245,20 @@ namespace BasicOrderSystem.WebAPI.Repositories
         {
             try
             {
+                //Create database connection
                 string connectionString = _connectionStringBuilder.GetConnectionString(_orderDBOptions.ConnectionString);
                 using (SqlConnection sqlConnection = new(connectionString))
                 using (SqlCommand sqlCmd = sqlConnection.CreateCommand())
                 {
+                    //Configure command properties
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.DeleteOrderStoredProcedure;
                     sqlCmd.CommandTimeout = _orderDBOptions.ConnectionString.CommandTimeout;
 
+                    //Add command parameters
                     sqlCmd.Parameters.Add(new SqlParameter("@OrderID", orderID));
 
+                    //Execute command
                     await sqlConnection.OpenAsync(cancellationToken);
                     await sqlCmd.ExecuteNonQueryAsync(cancellationToken);
                 }

@@ -16,6 +16,7 @@ namespace BasicOrderSystem.WebAPI.Services
                 TrustServerCertificate = true
             };
 
+            //If running in docker, connection string password will need to be read from environment variables
             if (string.IsNullOrEmpty(connectionStringConfig.Password))
             {
                 connectionStringConfig.Password = Environment.GetEnvironmentVariable("ORDERDB_PASSWORD");   
