@@ -36,7 +36,7 @@ namespace BasicOrderSystem.WebClients
             return result;
         }
 
-        protected async Task PostRequest<TRequestType> (string path, TRequestType requestBody)
+        protected async Task PostRequest<TRequestType>(string path, TRequestType requestBody)
         {
             HttpResponseMessage response = await HttpClient.PostAsJsonAsync(path, requestBody);
             response.EnsureSuccessStatusCode();
@@ -59,7 +59,7 @@ namespace BasicOrderSystem.WebClients
             return result;
         }
         public void Dispose()
-        { 
+        {
             HttpClient.Dispose();
         }
     }

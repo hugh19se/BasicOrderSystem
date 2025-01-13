@@ -1,8 +1,6 @@
 ﻿using BasicOrderSystem.Models;
-using BasicOrderSystem.WebClients;
 using BasicOrderSystem.WebContracts;
 using Serilog;
-using System.Configuration;
 
 namespace BasicOrderSystem.WindowsForms
 {
