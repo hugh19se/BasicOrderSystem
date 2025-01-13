@@ -1,5 +1,7 @@
 ﻿using BasicOrderSystem.WebClients;
+using BasicOrderSystem.WebContracts;
 using System.Configuration;
+using Serilog;
 
 namespace BasicOrderSystem.WindowsForms
 {
@@ -17,36 +19,39 @@ namespace BasicOrderSystem.WindowsForms
 
         private async void OkButton_Click(object sender, EventArgs e)
         {
-            //Check if user entered API URL will work
-            string baseAddress = BaseAddressTextBox.Text;
             try
             {
-                OrdersClient ordersClient = new(baseAddress);
+                //Check if user entered API URL will work
+                string baseAddress = BaseAddressTextBox.Text;
 
-                var testRequest = await ordersClient.GetCustomersAsync();
-                if (testRequest.HasError)
+                using (OrdersClient ordersClient = new(baseAddress))
                 {
-                    MessageBox.Show("Could Not Establish Connection To Web API", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    GetCustomersResponse testRequest = await ordersClient.GetCustomersAsync();
+
+                    if (testRequest.HasError)
+                    {
+                        MessageBox.Show("Could Not Establish Connection To The Web API", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
+
+                //API URL works, save it to App config
+                Configuration appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                appConfig.AppSettings.Settings.Remove("OrderAPIBaseAddress");
+                appConfig.AppSettings.Settings.Add("OrderAPIBaseAddress", baseAddress);
+                appConfig.Save(ConfigurationSaveMode.Full);
+
+                //Refresh app config
+                ConfigurationManager.RefreshSection(appConfig.AppSettings.SectionInformation.Name);
+
+                MessageBox.Show("API Base Address Saved Successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Close();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Could Not Establish Connection To Web API", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                Log.Error(ex, "EXCEPTION in " + nameof(OkButton_Click));
+                MessageBox.Show("Could Not Establish Connection To The Web API", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            //API URL works, save it to App config
-            Configuration appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            appConfig.AppSettings.Settings.Remove("OrderAPIBaseAddress");
-            appConfig.AppSettings.Settings.Add("OrderAPIBaseAddress", baseAddress);
-            appConfig.Save(ConfigurationSaveMode.Full);
-
-            //Refresh app config
-            ConfigurationManager.RefreshSection(appConfig.AppSettings.SectionInformation.Name);
-
-            MessageBox.Show("API Base Address Saved Successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();
         }
     }
 }

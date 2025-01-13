@@ -34,20 +34,28 @@ namespace BasicOrderSystem.WindowsForms
         }
         private async void OrderInfoMenuItem_Click(object sender, EventArgs e)
         {
-            //Get Order Info
-            ListViewItem? selectedOrderItem = OrdersListView.SelectedItems[0];
-            int orderID = Convert.ToInt32(selectedOrderItem.SubItems[0].Text);
-            GetOrderInfoResponse orderInfo = await Program.OrdersClient.GetOrderInfoAsync(orderID);
-
-            //Open Order Info Form
-            OrderInfoForm orderInfoForm = new(orderInfo.OrderInfo.Order, orderInfo.OrderInfo.Customer);
-            orderInfoForm.ShowDialog();
-
-            //Check if order info form exited with the Save Changes button
-            if (orderInfoForm.DialogResult == DialogResult.OK)
+            try
             {
-                //Reload form info
-                await LoadOrderData();
+                //Get Order Info
+                ListViewItem? selectedOrderItem = OrdersListView.SelectedItems[0];
+                int orderID = Convert.ToInt32(selectedOrderItem.SubItems[0].Text);
+                GetOrderInfoResponse orderInfo = await Program.OrdersClient.GetOrderInfoAsync(orderID);
+
+                //Open Order Info Form
+                OrderInfoForm orderInfoForm = new(orderInfo.OrderInfo.Order, orderInfo.OrderInfo.Customer);
+                orderInfoForm.ShowDialog();
+
+                //Check if order info form exited with the Save Changes button
+                if (orderInfoForm.DialogResult == DialogResult.OK)
+                {
+                    //Reload form info
+                    await LoadOrderData();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "EXCEPTION in " + nameof(OrderInfoMenuItem_Click));
+                MessageBox.Show("An Error Occurred While Creating Order:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
