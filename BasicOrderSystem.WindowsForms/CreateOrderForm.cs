@@ -27,7 +27,7 @@ namespace BasicOrderSystem.WindowsForms
 
             await Program.OrdersClient.CreateOrderAsync(total, customerID);
             DialogResult = DialogResult.OK;
-            MessageBox.Show("Changes Saved Successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Order Created Successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Close();
         }
 
