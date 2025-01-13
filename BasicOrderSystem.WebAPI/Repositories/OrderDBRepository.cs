@@ -218,5 +218,28 @@ namespace BasicOrderSystem.WebAPI.Repositories
                 throw;
             }
         }
+        public async Task DeleteOrderAsync(int orderID, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string connectionString = _connectionStringBuilder.GetConnectionString(_orderDBOptions.ConnectionString);
+                using (SqlConnection sqlConnection = new(connectionString))
+                using (SqlCommand sqlCmd = sqlConnection.CreateCommand())
+                {
+                    sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCmd.CommandText = _orderDBOptions.DeleteOrderStoredProcedure;
+
+                    sqlCmd.Parameters.Add(new SqlParameter("@OrderID", orderID));
+
+                    await sqlConnection.OpenAsync(cancellationToken);
+                    await sqlCmd.ExecuteNonQueryAsync(cancellationToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In " + nameof(DeleteOrderAsync));
+                throw;
+            }
+        }
     }
 }

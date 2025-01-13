@@ -100,5 +100,22 @@ namespace BasicOrderSystem.WebAPI.Controllers
             }
             return response;
         }
+
+        [HttpDelete]
+        public async Task<DeleteOrderResponse> DeleteOrderAsync(int orderID, CancellationToken cancellationToken)
+        {
+            DeleteOrderResponse response = new();
+            try
+            {
+                await _orderRetriever.DeleteOrderAsync(orderID, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In: " + nameof(DeleteOrderAsync));
+                response.HasError = true;
+                response.ErrorMessage = ex.Message;
+            }
+            return response;
+        }
     }
 }

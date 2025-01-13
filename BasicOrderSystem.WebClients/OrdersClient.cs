@@ -43,5 +43,9 @@ namespace BasicOrderSystem.WebClients
 
             await PutRequest<CreateOrderRequest>(ControllerRoute + "CreateOrder", createOrderRequestBody);
         }
+        public async Task<DeleteOrderResponse> DeleteOrderAsync(int orderID)
+        {
+            return await DeleteRequest<DeleteOrderResponse>(ControllerRoute + $"DeleteOrder?orderID={orderID}");
+        }
     }
 }

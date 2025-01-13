@@ -75,5 +75,17 @@ namespace BasicOrderSystem.WebAPI.Services
                 throw;
             }
         }
+        public async Task DeleteOrderAsync(int orderID, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _orderDBRepositoryDataAccess.DeleteOrderAsync(orderID, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In " + nameof(DeleteOrderAsync));
+                throw;
+            }
+        }
     }
 }

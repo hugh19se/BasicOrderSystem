@@ -47,6 +47,17 @@ namespace BasicOrderSystem.WebClients
             HttpResponseMessage response = await HttpClient.PutAsJsonAsync(path, requestBody);
             response.EnsureSuccessStatusCode();
         }
+
+        protected async Task<TResponseType> DeleteRequest<TResponseType>(string path)
+        {
+            HttpResponseMessage response = await HttpClient.DeleteAsync(path);
+            response.EnsureSuccessStatusCode();
+
+            Stream? stream = await response.Content.ReadAsStreamAsync();
+            TResponseType? result = JsonSerializer.Deserialize<TResponseType>(stream);
+
+            return result;
+        }
         public void Dispose()
         { 
             HttpClient.Dispose();

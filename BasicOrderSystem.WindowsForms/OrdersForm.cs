@@ -106,5 +106,20 @@ namespace BasicOrderSystem.WindowsForms
                 await LoadOrderData();
             }
         }
+
+        private async void DeleteOrderMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult deleteOrderConfirmation = MessageBox.Show("Are You Sure You Want To Delete This Order? This Action Cannot Be Undone", "Delete Order", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (deleteOrderConfirmation == DialogResult.Yes)
+            {
+                ListViewItem? selectedOrderItem = OrdersListView.SelectedItems[0];
+                int orderID = Convert.ToInt32(selectedOrderItem.SubItems[0].Text);
+
+                await Program.OrdersClient.DeleteOrderAsync(orderID);
+                MessageBox.Show("Order Removed Successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                await LoadOrderData();
+            }
+        }
+
     }
 }
