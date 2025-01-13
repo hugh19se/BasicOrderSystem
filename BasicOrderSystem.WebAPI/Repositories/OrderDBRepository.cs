@@ -33,6 +33,7 @@ namespace BasicOrderSystem.WebAPI.Repositories
                 {
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.GetCustomersStoredProcedure;
+                    sqlCmd.CommandTimeout = _orderDBOptions.ConnectionString.CommandTimeout;
 
                     await sqlConnection.OpenAsync(cancellationToken);
                     SqlDataReader dataReader = await sqlCmd.ExecuteReaderAsync(cancellationToken);
@@ -70,6 +71,7 @@ namespace BasicOrderSystem.WebAPI.Repositories
                 {
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.GetOrdersStoredProcedure;
+                    sqlCmd.CommandTimeout = _orderDBOptions.ConnectionString.CommandTimeout;
 
                     sqlCmd.Parameters.Add(new SqlParameter("@FromDate", fromDate));
                     sqlCmd.Parameters.Add(new SqlParameter("@ToDate", toDate));
@@ -117,6 +119,7 @@ namespace BasicOrderSystem.WebAPI.Repositories
                 {
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.GetOrderInfoStoredProcedure;
+                    sqlCmd.CommandTimeout = _orderDBOptions.ConnectionString.CommandTimeout;
 
                     sqlCmd.Parameters.Add(new SqlParameter("@OrderID", orderID));
 
@@ -179,6 +182,7 @@ namespace BasicOrderSystem.WebAPI.Repositories
                 {
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.UpdateOrderInfoStoredProcedure;
+                    sqlCmd.CommandTimeout = _orderDBOptions.ConnectionString.CommandTimeout;
 
                     sqlCmd.Parameters.Add(new SqlParameter("@OrderID", orderID));
                     sqlCmd.Parameters.Add(new SqlParameter("@Status", status));
@@ -204,6 +208,7 @@ namespace BasicOrderSystem.WebAPI.Repositories
                 {
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.CreateOrderStoredProcedure;
+                    sqlCmd.CommandTimeout = _orderDBOptions.ConnectionString.CommandTimeout;
 
                     sqlCmd.Parameters.Add(new SqlParameter("@Total", total));
                     sqlCmd.Parameters.Add(new SqlParameter("@CustomerID", customerID));
@@ -228,6 +233,7 @@ namespace BasicOrderSystem.WebAPI.Repositories
                 {
                     sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCmd.CommandText = _orderDBOptions.DeleteOrderStoredProcedure;
+                    sqlCmd.CommandTimeout = _orderDBOptions.ConnectionString.CommandTimeout;
 
                     sqlCmd.Parameters.Add(new SqlParameter("@OrderID", orderID));
 
