@@ -194,5 +194,29 @@ namespace BasicOrderSystem.WebAPI.Repositories
                 throw;
             }
         }
+        public async Task CreateOrderAsync(float total, int customerID, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string connectionString = _connectionStringBuilder.GetConnectionString(_orderDBOptions.ConnectionString);
+                using (SqlConnection sqlConnection = new(connectionString))
+                using (SqlCommand sqlCmd = sqlConnection.CreateCommand())
+                {
+                    sqlCmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCmd.CommandText = _orderDBOptions.CreateOrderStoredProcedure;
+
+                    sqlCmd.Parameters.Add(new SqlParameter("@Total", total));
+                    sqlCmd.Parameters.Add(new SqlParameter("@CustomerID", customerID));
+
+                    await sqlConnection.OpenAsync(cancellationToken);
+                    await sqlCmd.ExecuteNonQueryAsync(cancellationToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "EXCEPTION In " + nameof(CreateOrderAsync));
+                throw;
+            }
+        }
     }
 }

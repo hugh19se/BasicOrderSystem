@@ -33,5 +33,15 @@ namespace BasicOrderSystem.WebClients
 
             await PostRequest<UpdateOrderInfoRequest>(ControllerRoute + "UpdateOrderInfo", updateOrderInfoRequestBody);
         }
+        public async Task CreateOrderAsync(float total, int customerID)
+        {
+            CreateOrderRequest createOrderRequestBody = new()
+            {
+                Total = total,
+                CustomerID = customerID
+            };
+
+            await PutRequest<CreateOrderRequest>(ControllerRoute + "CreateOrder", createOrderRequestBody);
+        }
     }
 }

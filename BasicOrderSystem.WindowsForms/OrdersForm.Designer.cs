@@ -45,6 +45,7 @@
             OrderDeliveredHeader = new ColumnHeader();
             OrdersContextMenu = new ContextMenuStrip(components);
             OrderInfoMenuItem = new ToolStripMenuItem();
+            CreateOrderButton = new Button();
             OrdersContextMenu.SuspendLayout();
             SuspendLayout();
             // 
@@ -162,11 +163,22 @@
             OrderInfoMenuItem.Text = "Order Info";
             OrderInfoMenuItem.Click += OrderInfoMenuItem_Click;
             // 
+            // CreateOrderButton
+            // 
+            CreateOrderButton.Location = new Point(12, 288);
+            CreateOrderButton.Name = "CreateOrderButton";
+            CreateOrderButton.Size = new Size(97, 23);
+            CreateOrderButton.TabIndex = 8;
+            CreateOrderButton.Text = "Create Order";
+            CreateOrderButton.UseVisualStyleBackColor = true;
+            CreateOrderButton.Click += CreateOrderButton_Click;
+            // 
             // OrdersForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(CreateOrderButton);
             Controls.Add(OrdersListView);
             Controls.Add(SearchButton);
             Controls.Add(StatusLabel);
@@ -201,5 +213,6 @@
         private ColumnHeader OrderDeliveredHeader;
         private ContextMenuStrip OrdersContextMenu;
         private ToolStripMenuItem OrderInfoMenuItem;
+        private Button CreateOrderButton;
     }
 }

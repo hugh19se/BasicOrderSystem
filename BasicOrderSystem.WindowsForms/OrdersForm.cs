@@ -96,5 +96,15 @@ namespace BasicOrderSystem.WindowsForms
                 MessageBox.Show("An Error Occurred While Sending The API Request:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private async void CreateOrderButton_Click(object sender, EventArgs e)
+        {
+            CreateOrderForm createOrderForm = new();
+            createOrderForm.ShowDialog();
+
+            if (createOrderForm.DialogResult == DialogResult.OK)
+            {
+                await LoadOrderData();
+            }
+        }
     }
 }

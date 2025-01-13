@@ -42,6 +42,11 @@ namespace BasicOrderSystem.WebClients
             response.EnsureSuccessStatusCode();
         }
 
+        protected async Task PutRequest<TRequestType>(string path, TRequestType requestBody)
+        {
+            HttpResponseMessage response = await HttpClient.PutAsJsonAsync(path, requestBody);
+            response.EnsureSuccessStatusCode();
+        }
         public void Dispose()
         { 
             HttpClient.Dispose();
